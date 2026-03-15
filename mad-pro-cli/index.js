@@ -12,6 +12,7 @@ program
   .command('init')
   .description('Initialize AI skills for your project')
   .option('--ai <name>', 'Specify the AI bridge to use (e.g., antigravity)')
+  .option('--ide <type>', 'Specify the IDE (vscode, cursor, windsurf, android-studio, intellij, sublime, vim, neovim, zed, code-insiders)')
   .action(initCommand);
 
 program.parse();

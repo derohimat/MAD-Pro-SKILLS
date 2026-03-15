@@ -14,11 +14,27 @@ export default async function initCommand(options) {
 
   if (aiName === 'antigravity') {
     try {
-      // In a published package, templates are bundled inside the package folder
-      const sourceSkillsPath = path.resolve(__dirname, '../../templates/mad-skills');
-      const destinationPath = path.join(targetDir, '.agent', 'skills', 'mad-skills');
+      const ide = options.ide || 'vscode';
+      
+      // Mapping IDE to destination path
+      const idePaths = {
+        'vscode': path.join('.agent', 'skills', 'mad-skills'),
+        'code-insiders': path.join('.agent', 'skills', 'mad-skills'),
+        'cursor': path.join('.cursor', 'skills', 'mad-skills'),
+        'windsurf': path.join('.windsurf', 'skills', 'mad-skills'),
+        'android-studio': path.join('.idea', 'skills', 'mad-skills'),
+        'intellij': path.join('.idea', 'skills', 'mad-skills'),
+        'sublime': path.join('.sublime', 'skills', 'mad-skills'),
+        'vim': path.join('.vim', 'skills', 'mad-skills'),
+        'neovim': path.join('.vim', 'skills', 'mad-skills'),
+        'zed': path.join('.zed', 'skills', 'mad-skills')
+      };
 
-      console.log(chalk.yellow(`Installing skills to ${destinationPath}...`));
+      const relativeDestPath = idePaths[ide.toLowerCase()] || idePaths['vscode'];
+      const destinationPath = path.join(targetDir, relativeDestPath);
+      const sourceSkillsPath = path.resolve(__dirname, '../../templates/mad-skills');
+
+      console.log(chalk.yellow(`Installing skills for ${chalk.bold(ide)} to ${destinationPath}...`));
 
       await fs.ensureDir(destinationPath);
       
