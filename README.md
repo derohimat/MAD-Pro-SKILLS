@@ -34,6 +34,7 @@ npm install -g mad-pro-cli
 ```bash
 mad-pro init --ai antigravity
 ```
+
 *This will install the skills into your project's `.agent/skills/mad-skills/` directory.*
 
 ---
