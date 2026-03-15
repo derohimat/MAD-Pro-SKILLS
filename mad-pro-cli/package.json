@@ -6,6 +6,10 @@
   "bin": {
     "mad-pro": "./index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/derohimat/MAD-Pro-SKILLS"
+  },
   "files": [
     "index.js",
     "lib",

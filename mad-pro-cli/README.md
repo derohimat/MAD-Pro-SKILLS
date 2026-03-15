@@ -21,6 +21,7 @@ mad-pro init --ai antigravity
 ```
 
 This command will:
+
 1. Create a `.agent/skills/mad-skills` directory.
 2. Copy the full library of 35+ MAD reference modules.
 3. Enable your AI agent (like Antigravity) to act as a MAD Expert.
@@ -38,6 +39,10 @@ AI agents perform significantly better when they have access to specific, high-q
 - SOLID Principles
 - Jetpack Compose Best Practices
 - Offline-First Data Strategies
+
+## Github
+
+[https://github.com/derohimat/MAD-Pro-SKILLS](https://github.com/derohimat/MAD-Pro-SKILLS)
 
 ## License
 

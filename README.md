@@ -40,7 +40,13 @@ mad-pro init --ai antigravity
 
 ## 🗺️ Documentation
 
-Visit our **[GitHub Pages](https://denirohimat.github.io/JetpackComposeSkills/)** (Update with your actual URL) for a more visual guide and category breakdown.
+Visit our **[GitHub Pages](https://derohimat.github.io/MAD-Pro-SKILLS/)** for a more visual guide and category breakdown.
+
+---
+
+## 📁 Repository
+
+Official Repository: [https://github.com/derohimat/MAD-Pro-SKILLS](https://github.com/derohimat/MAD-Pro-SKILLS)
 
 ---
 
