@@ -24,11 +24,13 @@ This repository contains expert reference guides, architectural patterns, and en
 The easiest way to integrate these skills into your project is using our official CLI tool:
 
 ### 1. Install globally
+
 ```bash
 npm install -g mad-pro-cli
 ```
 
 ### 2. Initialize in your project
+
 ```bash
 mad-pro init --ai antigravity
 ```
@@ -43,6 +45,7 @@ Visit our **[GitHub Pages](https://denirohimat.github.io/JetpackComposeSkills/)*
 ---
 
 ## 📁 Directory Structure
+
 - `references/`: The core Markdown modules (35+ files).
 - `mad-pro-cli/`: Node.js CLI source code.
 - `SKILL.md`: The main orchestrator file for AI agents.
@@ -50,7 +53,9 @@ Visit our **[GitHub Pages](https://denirohimat.github.io/JetpackComposeSkills/)*
 ---
 
 ## 🤝 Contributing
+
 Contributions are welcome! If you have a professional-grade MAD skill or pattern you'd like to add, please open a PR.
 
 ## 📄 License
+
 This project is licensed under the MIT License - see the LICENSE file for details.

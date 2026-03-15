@@ -13,6 +13,7 @@ npm install -g mad-pro-cli
 ## Usage
 
 ### Initialize Skills
+
 Bootstrap the MAD Skills library into your current project:
 
 ```bash
@@ -25,11 +26,13 @@ This command will:
 3. Enable your AI agent (like Antigravity) to act as a MAD Expert.
 
 ### Options
+
 - `--ai <name>`: Specify the AI bridge (default: `antigravity`).
 - `--version`: Show the CLI version.
 - `--help`: Display all commands.
 
 ## Why use this?
+
 AI agents perform significantly better when they have access to specific, high-quality reference material. `mad-pro-cli` ensures your agent follows:
 - Clean Architecture
 - SOLID Principles
@@ -37,4 +40,5 @@ AI agents perform significantly better when they have access to specific, high-q
 - Offline-First Data Strategies
 
 ## License
+
 MIT
