@@ -1,0 +1,27 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific
+test-project/
+test-bundled/
+test-mad-pro/
+
+# Credentials
+.npmrc
+.env
+
+# Local agent skills (avoid committing local test installs)
+.agent/skills/mad-skills/
