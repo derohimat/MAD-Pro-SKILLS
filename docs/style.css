@@ -152,7 +152,66 @@ footer {
     font-size: 0.875rem;
 }
 
+/* Skillset Directory */
+.category-group {
+    margin-bottom: 4rem;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--surface-variant);
+}
+
+.category-header h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0;
+}
+
+.category-icon {
+    font-size: 1.5rem;
+}
+
+.skill-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.skill-item {
+    background: var(--card-bg);
+    border: 1px solid var(--surface-variant);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.skill-item:hover {
+    border-color: var(--primary);
+    background: rgba(103, 80, 164, 0.08);
+    transform: scale(1.02);
+}
+
+.skill-item h4 {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.skill-item span {
+    font-size: 0.8rem;
+    color: var(--outline);
+}
+
 @media (max-width: 768px) {
     .hero h1 { font-size: 2.5rem; }
     .hero { padding: 4rem 0 2rem; }
+    .skill-grid { grid-template-columns: 1fr 1fr; }
 }
