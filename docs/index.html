@@ -10,12 +10,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav class="nav">
+        <div class="nav-brand">MAD PRO</div>
+        <div class="nav-links">
+            <a href="#how-it-works" class="nav-link">How it Works</a>
+            <a href="#skillset" class="nav-link">Skillset</a>
+            <a href="https://github.com/derohimat/MAD-Pro-SKILLS" class="nav-link">GitHub</a>
+        </div>
+    </nav>
+
     <header class="hero">
         <div class="container hero-content">
             <div class="hero-text">
-                <span class="badge">v1.0.0 Stable</span>
-                <h1>MAD Pro CLI</h1>
-                <p>Elevate your Android projects with a comprehensive library of 35+ professional MAD skills, optimized for AI-driven development.</p>
+                <span class="badge">v1.1.0 Multi-IDE Support</span>
+                <h1>Engineering Experts for your Agent</h1>
+                <p>Equip your AI agent with professional Modern Android Development patterns. Optimized for high-throughput coding with Antigravity, Cursor, Windsurf, and more.</p>
                 
                 <div class="terminal">
                     <div class="code-line">
@@ -31,8 +40,69 @@
     </header>
 
     <main class="container">
-        <section class="section">
-            <h2 class="section-title">Quick Start</h2>
+        <section class="stats">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">35+</div>
+                    <div class="stat-label">MAD Skills</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Layers & Contexts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Supported IDEs</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="section">
+            <h2 class="section-title">How It Works</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1</div>
+                    <div class="timeline-content">
+                        <h3>Global Installation</h3>
+                        <p>Install the MAD Pro CLI globally to manage skills across all your Android projects.</p>
+                        <div class="terminal" style="margin-top: 1rem; padding: 1rem;">
+                            <div class="code-line"><span class="prompt">$</span><span>npm install -g mad-pro-cli</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">2</div>
+                    <div class="timeline-content">
+                        <h3>IDE-Specific Init</h3>
+                        <p>Initialize skills tailored for your specific environment (Cursor, VS Code, Windsurf, etc.).</p>
+                        <div class="terminal" style="margin-top: 1rem; padding: 1rem;">
+                            <div class="code-line"><span class="prompt">$</span><span>mad-pro init --ide cursor</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">3</div>
+                    <div class="timeline-content">
+                        <h3>Agent Empowerment</h3>
+                        <p>Your AI agent automatically detects the industry-standard patterns and builds high-quality Android apps.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="border-top: 1px solid var(--glass-border); padding-top: 4rem;">
+            <div class="tech-stack">
+                <div class="tech-item">Android Studio</div>
+                <div class="tech-item">Jetpack Compose</div>
+                <div class="tech-item">Kotlin Multiplatform</div>
+                <div class="tech-item">Cursor</div>
+                <div class="tech-item">Windsurf</div>
+                <div class="tech-item">VS Code</div>
+            </div>
+        </section>
+
+        <section id="skillset" class="section">
+            <h2 class="section-title">Comprehensive Skill Directory</h2>
             <div class="grid">
                 <div class="card">
                     <h3>1. Install Global</h3>
