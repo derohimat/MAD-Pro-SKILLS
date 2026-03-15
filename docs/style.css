@@ -1,0 +1,157 @@
+:root {
+    --primary: #6750A4;
+    --primary-container: #EADDFF;
+    --on-primary-container: #21005D;
+    --secondary: #625B71;
+    --surface: #1C1B1F;
+    --on-surface: #E6E1E5;
+    --surface-variant: #49454F;
+    --on-surface-variant: #CAC4D0;
+    --outline: #938F99;
+    --bg-gradient: linear-gradient(135deg, #1C1B1F 0%, #2D2B33 100%);
+    --card-bg: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg-gradient);
+    color: var(--on-surface);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 0 4rem;
+    text-align: center;
+    background: radial-gradient(circle at 50% -20%, rgba(103, 80, 164, 0.3) 0%, transparent 50%);
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #D0BCFF, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    color: var(--on-surface-variant);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Code Blocks */
+.terminal {
+    background: #000;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    border: 1px solid var(--surface-variant);
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.terminal::before {
+    content: '•••';
+    position: absolute;
+    top: 0.5rem;
+    left: 1rem;
+    color: var(--outline);
+    letter-spacing: 3px;
+    font-size: 1.25rem;
+}
+
+.code-line {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    display: flex;
+    gap: 1rem;
+}
+
+.prompt { color: var(--primary); font-weight: bold; }
+.command { color: #fff; }
+
+/* Grid Sections */
+.section {
+    padding: 4rem 0;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--surface-variant);
+    border-radius: 1rem;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    background: rgba(103, 80, 164, 0.1);
+}
+
+.card h3 {
+    margin-bottom: 1rem;
+    color: #D0BCFF;
+}
+
+.card p {
+    font-size: 0.95rem;
+    color: var(--on-surface-variant);
+}
+
+/* Footer */
+footer {
+    padding: 4rem 0;
+    text-align: center;
+    border-top: 1px solid var(--surface-variant);
+    color: var(--outline);
+    font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.5rem; }
+    .hero { padding: 4rem 0 2rem; }
+}
