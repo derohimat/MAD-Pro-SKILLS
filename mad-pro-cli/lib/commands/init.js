@@ -27,7 +27,12 @@ export default async function initCommand(options) {
         'sublime': path.join('.sublime', 'skills', 'mad-skills'),
         'vim': path.join('.vim', 'skills', 'mad-skills'),
         'neovim': path.join('.vim', 'skills', 'mad-skills'),
-        'zed': path.join('.zed', 'skills', 'mad-skills')
+        'zed': path.join('.zed', 'skills', 'mad-skills'),
+        'antigravity': path.join('.agent', 'skills', 'mad-skills'),
+        'fleet': path.join('.fleet', 'skills', 'mad-skills'),
+        'nova': path.join('.nova', 'skills', 'mad-skills'),
+        'xcode': path.join('Xcode', 'skills', 'mad-skills'),
+        'webstorm': path.join('.idea', 'skills', 'mad-skills')
       };
 
       const relativeDestPath = idePaths[ide.toLowerCase()] || idePaths['vscode'];
