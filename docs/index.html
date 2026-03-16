@@ -94,56 +94,97 @@
         <section id="ide-support" class="section">
             <h2 class="section-title">IDE Ecosystem Support</h2>
             <div class="ide-grid">
-                <div class="ide-card">
+                <div class="ide-card" data-ide="vscode">
                     <div class="ide-icon">💻</div>
                     <h4>VS Code</h4>
                     <p>Native agents & command integration</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="cursor">
                     <div class="ide-icon">🚀</div>
                     <h4>Cursor</h4>
                     <p>Optimized for Composer & MCP</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="windsurf">
                     <div class="ide-icon">🌊</div>
                     <h4>Windsurf</h4>
                     <p>Cascading skill detection</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="android-studio">
                     <div class="ide-icon">🤖</div>
                     <h4>Android Studio</h4>
                     <p>Native IntelliJ skill structures</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="intellij">
                     <div class="ide-icon">💡</div>
                     <h4>IntelliJ IDEA</h4>
                     <p>Enterprise skill management</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="sublime">
                     <div class="ide-icon">📝</div>
                     <h4>Sublime Text</h4>
                     <p>Lightweight skill bridging</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="vim">
                     <div class="ide-icon">⚡</div>
                     <h4>Vim / Neovim</h4>
                     <p>CLI-first development flows</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="zed">
                     <div class="ide-icon">💎</div>
                     <h4>Zed</h4>
                     <p>High-performance agent bridging</p>
                 </div>
-                <div class="ide-card">
+                <div class="ide-card" data-ide="code-insiders">
                     <div class="ide-icon">🏗️</div>
                     <h4>Code Insiders</h4>
                     <p>Early access feature support</p>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 2rem;">
-                <p class="gray-text">Initialize with <code>mad-pro init --ide [name]</code></p>
+
+            <div class="command-generator">
+                <div class="command-box">
+                    <code id="generated-command">mad-pro init --ide vscode</code>
+                    <button id="copy-btn" class="copy-button">
+                        <span id="copy-text">Copy</span>
+                    </button>
+                </div>
+                <p class="gray-text">Selected IDE: <span id="selected-ide-name" style="color: var(--primary);">VS Code</span></p>
             </div>
         </section>
+
+        <script>
+            document.querySelectorAll('.ide-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    // Update active state
+                    document.querySelectorAll('.ide-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+
+                    // Update command
+                    const ide = card.getAttribute('data-ide');
+                    const ideName = card.querySelector('h4').textContent;
+                    document.getElementById('generated-command').textContent = `mad-pro init --ide ${ide}`;
+                    document.getElementById('selected-ide-name').textContent = ideName;
+                    
+                    // Reset copy button
+                    const copyText = document.getElementById('copy-text');
+                    copyText.textContent = 'Copy';
+                });
+            });
+
+            document.getElementById('copy-btn').addEventListener('click', () => {
+                const command = document.getElementById('generated-command').textContent;
+                navigator.clipboard.writeText(command).then(() => {
+                    const copyText = document.getElementById('copy-text');
+                    copyText.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyText.textContent = 'Copy';
+                    }, 2000);
+                });
+            });
+            
+            // Set default active
+            document.querySelector('[data-ide="vscode"]').classList.add('active');
+        </script>
 
         <section class="section" style="border-top: 1px solid var(--glass-border); padding-top: 4rem;">
             <div class="tech-stack">
