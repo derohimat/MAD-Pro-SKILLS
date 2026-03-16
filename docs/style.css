@@ -391,3 +391,52 @@ h1, h2, h3, h4 {
     .nav { min-width: 90%; }
     .stats-grid { grid-template-columns: 1fr; }
 }
+
+/* IDE Support Section */
+.ide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.ide-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.ide-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
+}
+
+.ide-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.ide-card h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.ide-card p {
+    font-size: 0.9rem;
+    color: var(--on-surface-variant);
+    line-height: 1.4;
+}
+
+.gray-text {
+    color: var(--on-surface-variant);
+    opacity: 0.6;
+    font-size: 0.9rem;
+}
