@@ -43,9 +43,18 @@ Follow these core principles:
 - **[Testing](references/testing.md)**: Semantic UI tests and Unit testing.
 - **[Security](references/security.md)**: Secure storage, biometrics, and permissions.
 - **[Advanced UI (Pro)](references/advanced_ui.md)**: Animations, Canvas, and custom layouts.
-- **[accessibility](references/accessibility.md)**: Inclusivity and Semantics.
+- **[Accessibility](references/accessibility.md)**: Inclusivity and Semantics.
 - **[Google Play Skills](references/google_play_skills.md)**: Compliance and release management.
 - **[WorkManager](references/workmanager.md)**: Persistent and reliable background tasks.
+- **[Widget & Glance](references/widget_glance.md)**: Home screen and lock screen widgets with Glance.
+- **[App Shortcuts](references/app_shortcuts.md)**: Static, dynamic, and pinned launcher shortcuts.
+- **[Camera & Media](references/camera_media.md)**: CameraX, photo/video capture, Media3, and Coil.
+- **[Barcode & QR Code](references/barcode_qr.md)**: ML Kit barcode scanner, QR generation, and overlay UI.
+- **[Image Editing](references/image_editing.md)**: Crop (uCrop), filters, Canvas annotation, and export.
+- **[Voice & Speech](references/voice_speech.md)**: SpeechRecognizer, TextToSpeech, and voice input UI.
+- **[Gemini API](references/gemini_api.md)**: Text, vision, streaming, multi-turn chat, and function calling.
+- **[LLM UI Patterns](references/llm_ui_patterns.md)**: Streaming text, typewriter effect, Markdown rendering, and chat UX.
+- **[ARCore](references/ar_core.md)**: Product placement, measurement tool, face filters, and image tracking.
 
 ### 4. Advanced & Ecosystem Skills
 
@@ -120,22 +129,50 @@ All industry skill reference files are located in the `references/industry/` fol
 
 - **[Hardware Integration](references/industry/hardware_integration.md)**: BLE device scanning, NFC read/write, USB serial communication, IoT sensor dashboard, and hardware permissions.
 
+### 17. Logistics & Fleet
+
+- **[Logistics & Fleet](references/industry/logistics_fleet.md)**: Live fleet map, driver dispatch, route optimization, proof of delivery, and geofence arrival.
+
+### 18. Insurance
+
+- **[Insurance](references/industry/insurance.md)**: Policy dashboard, claim submission wizard, photo evidence, premium calculator, and digital policy card.
+
+### 19. HR & Attendance
+
+- **[HR & Attendance](references/industry/hr_attendance.md)**: GPS clock-in/out, attendance calendar, leave request, payslip viewer, and face recognition.
+
+### 20. Point of Sale (POS)
+
+- **[POS & Retail](references/industry/pos_retail.md)**: Checkout UI, cart panel, payment methods, Bluetooth receipt printing, and inventory management.
+
+### 21. Travel Booking
+
+- **[Travel Booking](references/industry/travel_booking.md)**: Flight search, adaptive results list, interactive seat picker, and digital boarding pass.
+
+### 22. Gaming & Leaderboard
+
+- **[Gaming & Leaderboard](references/industry/gaming_leaderboard.md)**: Podium UI, achievements, unlock animations, in-game store, and Google Play Games integration.
+
+### 23. Media Streaming
+
+- **[Media Streaming](references/industry/media_streaming.md)**: ExoPlayer/Media3, custom controls, PiP, HLS/DASH, DRM Widevine, and offline download.
+
 ## Cross-Industry Technical Skills
 
 Foundational capabilities that power multiple industry app categories.
 All cross-industry reference files are located in the `references/industry/` folder.
 
-### 17. Real-Time & Connectivity
+### 24. Real-Time & Connectivity
 
 - **[Real-Time Sync](references/industry/real_time_sync.md)**: WebSocket with reconnection, Firebase RTDB, SSE, optimistic updates, and connection banners.
 - **[Maps & Location](references/industry/maps_location.md)**: Google Maps Compose, location permissions, FusedLocationProvider, geocoding, polylines, and geofencing.
 - **[Push Notifications](references/industry/push_notifications.md)**: FCM setup, notification channels, Android 13+ permission, deep links, and topic subscriptions.
 
-### 18. Monetization
+### 25. Monetization
 
 - **[In-App Payments](references/industry/in_app_payments.md)**: Google Play Billing, subscriptions, one-time purchases, server-side verification, and paywall UI.
 
-### 19. Data & Observability
+### 26. Data & Observability
 
 - **[Analytics & Tracking](references/industry/analytics_tracking.md)**: Event naming conventions, tracker abstraction, screen tracking, funnel tracking, and user properties.
 - **[Offline-First](references/industry/offline_first.md)**: Single source of truth, NetworkMonitor, WorkManager sync, optimistic create, and conflict resolution.
