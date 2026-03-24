@@ -170,7 +170,8 @@ All cross-industry reference files are located in the `references/industry/` fol
 
 ### 25. Monetization
 
-- **[In-App Payments](references/industry/in_app_payments.md)**: Google Play Billing, subscriptions, one-time purchases, server-side verification, and paywall UI.
+- **[In-App Payments](references/industry/in_app_payments.md)**: Google Play Billing, one-time purchases, server-side verification, and paywall UI.
+- **[Google Play Subscriptions](references/industry/google_play_subscriptions.md)**: Monthly/yearly/weekly plans, free trial, intro pricing, plan switch (upgrade/downgrade), grace period, hold, and server acknowledgment.
 
 ### 26. Data & Observability
 
