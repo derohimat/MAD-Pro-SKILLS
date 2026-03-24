@@ -1,152 +1,57 @@
-# Analytics & Event Tracking Skills
+# Skill: Analytics & Tracking
 
-Analytics help you understand user behavior and measure key business metrics across any industry app.
+A scalable analytics architecture prevents business logic from being polluted with dozens of tracking SDK calls (Firebase, Mixpanel, Amplitude).
 
-## 1. Firebase Analytics Event Naming Convention
+## 📊 Architecture: Analytics Event Bus
 
-Follow a consistent naming scheme: `snake_case`, noun_verb pattern.
+Never inject `FirebaseAnalytics` directly into a ViewModel or Composable.Create an `AnalyticsEngine` interface to centralize event routing.
 
 ```kotlin
-object AnalyticsEvent {
-    // E-commerce
-    const val PRODUCT_VIEWED = "product_viewed"
-    const val ADD_TO_CART = "add_to_cart"
-    const val PURCHASE_COMPLETED = "purchase_completed"
-    const val CHECKOUT_STARTED = "checkout_started"
-    // Ride-hailing
-    const val RIDE_BOOKING_STARTED = "ride_booking_started"
-    const val DRIVER_ACCEPTED = "driver_accepted"
-    const val RIDE_COMPLETED = "ride_completed"
-    // Content
-    const val CONTENT_VIEWED = "content_viewed"
-    const val VIDEO_PLAYED = "video_played"
-    const val SEARCH_PERFORMED = "search_performed"
-    // Engagement
-    const val NOTIFICATION_TAPPED = "notification_tapped"
-    const val SHARE_TAPPED = "share_tapped"
-    const val RATING_SUBMITTED = "rating_submitted"
+// 1. Define standard events to guarantee type-safety
+sealed class AnalyticsEvent(val eventName: String, val params: Map<String, Any> = emptyMap()) {
+    data class ScreenAdded(val screenName: String) : AnalyticsEvent("screen_view", mapOf("screen" to screenName))
+    data class ItemAddedToCart(val itemId: String, val price: Double) : AnalyticsEvent("add_to_cart", mapOf("item_id" to itemId, "price" to price))
+    data class CheckoutCompleted(val total: Double) : AnalyticsEvent("checkout_completed", mapOf("total" to total))
 }
-```
 
-## 2. Analytics Tracker Interface
-
-Abstraction allows easy swapping of analytics backends or adding multiple providers.
-
-```kotlin
-interface AnalyticsTracker {
-    fun track(event: String, params: Map<String, Any> = emptyMap())
+// 2. Core Interface
+interface AnalyticsEngine {
+    fun trackEvent(event: AnalyticsEvent)
     fun setUserProperty(key: String, value: String)
-    fun setUserId(id: String?)
 }
 
-class FirebaseAnalyticsTracker(private val analytics: FirebaseAnalytics) : AnalyticsTracker {
-    override fun track(event: String, params: Map<String, Any>) {
-        val bundle = Bundle().apply {
-            params.forEach { (key, value) ->
-                when (value) {
-                    is String -> putString(key, value)
-                    is Int -> putInt(key, value)
-                    is Double -> putDouble(key, value)
-                    is Long -> putLong(key, value)
-                    is Boolean -> putBoolean(key, value)
-                }
-            }
+// 3. Implementation routes to 3rd party SDKs
+class DefaultAnalyticsEngine(
+    private val firebase: FirebaseAnalytics,
+    private val mixpanel: MixpanelAPI
+) : AnalyticsEngine {
+    
+    override fun trackEvent(event: AnalyticsEvent) {
+        val bundle = Bundle().apply { 
+            event.params.forEach { (k, v) -> putString(k, v.toString()) }
         }
-        analytics.logEvent(event, bundle)
-    }
-    override fun setUserProperty(key: String, value: String) = analytics.setUserProperty(key, value)
-    override fun setUserId(id: String?) = analytics.setUserId(id)
-}
-```
-
-## 3. Tracking in ViewModel
-
-```kotlin
-@HiltViewModel
-class ProductViewModel @Inject constructor(
-    private val productRepo: ProductRepository,
-    private val tracker: AnalyticsTracker
-) : ViewModel() {
-
-    fun onProductViewed(product: Product) {
-        tracker.track(AnalyticsEvent.PRODUCT_VIEWED, mapOf(
-            "product_id" to product.id,
-            "product_name" to product.name,
-            "product_category" to product.category,
-            "price" to product.price
-        ))
-    }
-
-    fun onAddToCart(product: Product, quantity: Int) {
-        tracker.track(AnalyticsEvent.ADD_TO_CART, mapOf(
-            "product_id" to product.id,
-            "quantity" to quantity,
-            "value" to (product.price * quantity)
-        ))
+        
+        firebase.logEvent(event.eventName, bundle)
+        mixpanel.track(event.eventName, JSONObject(event.params))
     }
 }
 ```
 
-## 4. Screen Tracking
+## 🎯 UI Execution: Compose Screen Tracking
 
-Track screen views automatically by observing navigation events.
+Use `DisposableEffect` to automatically track screen entry/exit times.
 
 ```kotlin
 @Composable
-fun AnalyticsNavHost(navController: NavHostController, tracker: AnalyticsTracker) {
-    val currentEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentEntry?.destination?.route
-
-    LaunchedEffect(currentRoute) {
-        currentRoute?.let { route ->
-            tracker.track(FirebaseAnalytics.Event.SCREEN_VIEW, mapOf(
-                FirebaseAnalytics.Param.SCREEN_NAME to route,
-                FirebaseAnalytics.Param.SCREEN_CLASS to route
-            ))
+fun TrackScreenView(screenName: String, engine: AnalyticsEngine = LocalAnalytics.current) {
+    DisposableEffect(screenName) {
+        val startTime = System.currentTimeMillis()
+        engine.trackEvent(AnalyticsEvent.ScreenAdded(screenName))
+        
+        onDispose {
+            val durationInSeconds = (System.currentTimeMillis() - startTime) / 1000
+            engine.trackEvent(AnalyticsEvent.ScreenExit(screenName, durationInSeconds))
         }
     }
 }
 ```
-
-## 5. Funnel Tracking
-
-Track each step of a multi-step flow (checkout, onboarding) to identify where users drop off.
-
-```kotlin
-sealed class CheckoutStep(val stepNumber: Int, val stepName: String) {
-    object Address : CheckoutStep(1, "address")
-    object Shipping : CheckoutStep(2, "shipping")
-    object Payment : CheckoutStep(3, "payment")
-    object Review : CheckoutStep(4, "review")
-}
-
-fun trackCheckoutStep(step: CheckoutStep, orderId: String) {
-    tracker.track("checkout_step_viewed", mapOf(
-        "step" to step.stepNumber,
-        "step_name" to step.stepName,
-        "order_id" to orderId
-    ))
-}
-```
-
-## 6. User Properties
-
-Segment users by properties for targeted analysis.
-
-```kotlin
-fun setUserSegmentProperties(user: User) {
-    tracker.setUserId(user.id)
-    tracker.setUserProperty("subscription_tier", user.subscriptionTier)
-    tracker.setUserProperty("account_age_days", user.accountAgeDays.toString())
-    tracker.setUserProperty("preferred_category", user.preferredCategory)
-    tracker.setUserProperty("country", user.country)
-}
-```
-
-## Best Practices
-
-- **Debug mode**: Use `adb shell setprop debug.firebase.analytics.app com.yourpackage` to see events in real time.
-- **Don't over-track**: Focus on events that answer business questions. Fewer, meaningful events > hundreds of noisy ones.
-- **PII**: Never log personally identifiable information (email, phone, full name) in event parameters.
-- **Revenue events**: Use `FirebaseAnalytics.Event.PURCHASE` with `CURRENCY` and `VALUE` for revenue reporting.
-- **BigQuery export**: Enable BigQuery export in Firebase console for raw event analysis.

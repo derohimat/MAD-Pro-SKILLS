@@ -1,138 +1,62 @@
-# In-App Payments & Billing Skills
+# Skill: In-App Payments & Billing
 
-Implement Google Play Billing for subscriptions, one-time purchases, and consumable products.
+Integrating Google Play Billing requires strict adherence to purchase verification lifecycles.
 
-## 1. BillingClient Setup
+## 💳 Architecture: The Billing Lifecycle
+
+1. **Connect**: Initialize `BillingClient`.
+2. **Query**: Fetch local-specific pricing for `ProductDetails`.
+3. **Launch**: Show the Google Play bottom sheet.
+4. **Verify**: When purchase succeeds on-device, send the token to your backend to verify with Google's API (prevent spoofing).
+5. **Acknowledge**: You *must* acknowledge the purchase within 3 days, or Google refunds the user automatically.
+
+## 🛠️ Execution: BillingClient Wrapper
+
+Wrap the volatile `BillingClient` in a Flow/State-based architecture.
 
 ```kotlin
-class BillingManager(private val context: Context) {
-    private val _billingState = MutableStateFlow<BillingState>(BillingState.Disconnected)
-    val billingState: StateFlow<BillingState> = _billingState
+class BillingManager(context: Context) : PurchasesUpdatedListener {
 
     private val billingClient = BillingClient.newBuilder(context)
-        .setListener { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-                purchases.forEach { processPurchase(it) }
-            }
-        }
-        .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().enablePrepaidPlans().build())
+        .setListener(this)
+        .enablePendingPurchases()
         .build()
 
-    fun connect() {
+    // 1. Connect
+    fun startConnection() {
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(result: BillingResult) {
                 if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                    _billingState.value = BillingState.Connected
+                    queryProducts()
                 }
             }
             override fun onBillingServiceDisconnected() {
-                _billingState.value = BillingState.Disconnected
+                // Implement exponential backoff retry
             }
         })
     }
 
-    fun disconnect() = billingClient.endConnection()
-}
-```
-
-## 2. Querying Available Products
-
-```kotlin
-suspend fun BillingClient.queryProducts(productIds: List<String>, type: String): List<ProductDetails> {
-    val params = QueryProductDetailsParams.newBuilder()
-        .setProductList(productIds.map {
-            QueryProductDetailsParams.Product.newBuilder().setProductId(it).setProductType(type).build()
-        })
-        .build()
-    return queryProductDetailsAsync(params).productDetailsList ?: emptyList()
-}
-
-// Usage
-val subs = billingClient.queryProducts(listOf("premium_monthly", "premium_annual"), BillingClient.ProductType.SUBS)
-val iap = billingClient.queryProducts(listOf("extra_credits"), BillingClient.ProductType.INAPP)
-```
-
-## 3. Launching the Purchase Flow
-
-```kotlin
-fun launchPurchaseFlow(activity: Activity, productDetails: ProductDetails, offerToken: String? = null) {
-    val offerDetails = offerToken?.let {
-        BillingFlowParams.ProductDetailsParams.newBuilder()
-            .setProductDetails(productDetails)
-            .setOfferToken(it)
-            .build()
-    } ?: BillingFlowParams.ProductDetailsParams.newBuilder()
-        .setProductDetails(productDetails)
-        .build()
-
-    val billingFlowParams = BillingFlowParams.newBuilder()
-        .setProductDetailsParamsList(listOf(offerDetails))
-        .build()
-    billingClient.launchBillingFlow(activity, billingFlowParams)
-}
-```
-
-## 4. Acknowledging Purchases
-
-All purchases must be acknowledged within 3 days or they will be refunded automatically.
-
-```kotlin
-suspend fun processPurchase(purchase: Purchase) {
-    if (purchase.purchaseState != Purchase.PurchaseState.PURCHASED) return
-    // Verify receipt with your backend first
-    val isValid = backendRepository.verifyPurchase(purchase.purchaseToken)
-    if (!isValid) return
-
-    // Grant entitlement
-    entitlementRepository.grantAccess(purchase.products)
-
-    // Acknowledge
-    if (!purchase.isAcknowledged) {
-        val params = AcknowledgePurchaseParams.newBuilder()
-            .setPurchaseToken(purchase.purchaseToken)
-            .build()
-        billingClient.acknowledgePurchase(params)
-    }
-}
-```
-
-## 5. Checking Entitlement
-
-```kotlin
-suspend fun BillingClient.isSubscribed(productId: String): Boolean {
-    val params = QueryPurchasesParams.newBuilder()
-        .setProductType(BillingClient.ProductType.SUBS)
-        .build()
-    val result = queryPurchasesAsync(params)
-    return result.purchasesList.any { purchase ->
-        purchase.products.contains(productId) && purchase.purchaseState == Purchase.PurchaseState.PURCHASED
-    }
-}
-```
-
-## 6. Paywall UI
-
-```kotlin
-@Composable
-fun PaywallScreen(plans: List<ProductDetails>, onPurchase: (ProductDetails) -> Unit, onRestore: () -> Unit) {
-    Column(modifier = Modifier.fillMaxSize().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Unlock Premium", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-        Text("Access all features with a subscription", style = MaterialTheme.typography.bodyMedium)
-        Spacer(Modifier.height(32.dp))
-        plans.forEach { plan ->
-            PlanCard(plan = plan, isRecommended = plan.productId.contains("annual"), onClick = { onPurchase(plan) })
-            Spacer(Modifier.height(12.dp))
+    // 3. Purchase Result Callback
+    override fun onPurchasesUpdated(result: BillingResult, purchases: List<Purchase>?) {
+        if (result.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+            for (purchase in purchases) {
+                verifyAndAcknowledge(purchase)
+            }
         }
-        Spacer(Modifier.weight(1f))
-        TextButton(onClick = onRestore) { Text("Restore Purchases") }
+    }
+
+    // 4 & 5. Verify and Acknowledge
+    private fun verifyAndAcknowledge(purchase: Purchase) {
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged) {
+                // TODO: Send purchase.purchaseToken to your backend First!
+                // If backend succeeds, then acknowledge:
+                val params = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                billingClient.acknowledgePurchase(params) { /* Log success */ }
+            }
+        }
     }
 }
 ```
-
-## Best Practices
-
-- **Server-side verification**: Always verify purchase tokens server-side. Client-side checks alone are insecure.
-- **Handle pending purchases**: The `PENDING` state is real (e.g., cash-pay kiosks). Do not grant access until `PURCHASED`.
-- **Subscription states**: Handle `onHold`, `paused`, and `grace period` subscription states gracefully.
-- **Test accounts**: Use Google Play test accounts with test product IDs to validate flows without real charges.
-- **Restore purchases**: Always provide a "Restore Purchases" option for users who reinstall the app.
