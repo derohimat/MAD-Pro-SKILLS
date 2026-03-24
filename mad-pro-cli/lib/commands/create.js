@@ -2,11 +2,12 @@ import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
+import { execSync } from 'child_process';
 import initCommand from './init.js';
 
 export default async function createCommand(projectName) {
   console.log(chalk.bold.magenta('\n🏗️  MAD Pro - New Project Scaffold'));
-  console.log(chalk.gray('Generate a production-ready Android project with Clean Architecture.\n'));
+  console.log(chalk.gray('Generate a production-ready Android/KMP project.\n'));
 
   if (!projectName) {
     const res = await inquirer.prompt([{
@@ -21,27 +22,42 @@ export default async function createCommand(projectName) {
 
   const answers = await inquirer.prompt([
     {
+      type: 'list',
+      name: 'templateType',
+      message: 'Select Template:',
+      choices: [
+        { name: 'KrossWave KMP (Recommended - Multi-module, KMP, Koin, Voyager)', value: 'kmp' },
+        { name: 'Basic Android (Single module, Hilt, Navigation Compose)', value: 'basic' }
+      ]
+    },
+    {
       type: 'input',
       name: 'package',
       message: 'Package name:',
       default: `com.example.${projectName.toLowerCase()}`,
       validate: v => /^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)+$/.test(v) || 'Invalid package (e.g. com.example.app)'
-    },
-    {
-      type: 'list',
-      name: 'minSdk',
-      message: 'Minimum SDK:',
-      choices: ['24', '26', '28', '30'],
-      default: '26'
-    },
-    {
-      type: 'list',
-      name: 'targetSdk',
-      message: 'Target SDK:',
-      choices: ['34', '35'],
-      default: '35'
     }
   ]);
+
+  let basicAnswers = {};
+  if (answers.templateType === 'basic') {
+      basicAnswers = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'minSdk',
+          message: 'Minimum SDK:',
+          choices: ['24', '26', '28', '30'],
+          default: '26'
+        },
+        {
+          type: 'list',
+          name: 'targetSdk',
+          message: 'Target SDK:',
+          choices: ['34', '35'],
+          default: '35'
+        }
+      ]);
+  }
 
   const targetDir = path.join(process.cwd(), projectName);
 
@@ -50,44 +66,122 @@ export default async function createCommand(projectName) {
     process.exit(1);
   }
 
-  console.log(chalk.cyan(`\n🔨 Generating project structure...\n`));
-
   const pkg = answers.package;
   const pkgPath = pkg.replace(/\./g, '/');
-  const compileSdk = answers.targetSdk;
-  const minSdk = answers.minSdk;
-  const targetSdk = answers.targetSdk;
 
-  // ── Directory Tree ──────────────────────────────────────
-  const dirs = [
-    `app/src/main/java/${pkgPath}`,
-    `app/src/main/java/${pkgPath}/ui/theme`,
-    `app/src/main/java/${pkgPath}/ui/navigation`,
-    `app/src/main/java/${pkgPath}/ui/screens/home`,
-    `app/src/main/java/${pkgPath}/domain/model`,
-    `app/src/main/java/${pkgPath}/domain/usecase`,
-    `app/src/main/java/${pkgPath}/domain/repository`,
-    `app/src/main/java/${pkgPath}/data/repository`,
-    `app/src/main/java/${pkgPath}/data/remote`,
-    `app/src/main/java/${pkgPath}/data/local`,
-    `app/src/main/java/${pkgPath}/di`,
-    `app/src/main/res/drawable`,
-    `app/src/main/res/values`,
-    `app/src/main/res/mipmap-hdpi`,
-    `app/src/test/java/${pkgPath}`,
-    `app/src/androidTest/java/${pkgPath}`,
-    `gradle/wrapper`,
-  ];
+  if (answers.templateType === 'kmp') {
+    console.log(chalk.cyan(`\n🔨 Cloning KrossWave KMP template...\n`));
+    try {
+      execSync(`git clone --depth 1 https://github.com/derohimat/android-kmp-starter.git "${projectName}"`, { stdio: 'inherit' });
+      await fs.remove(path.join(targetDir, '.git'));
+      console.log(`  ${chalk.green('✓')} Template cloned successfully`);
+      
+      console.log(chalk.cyan(`\n🔨 Customizing package name to ${pkg}...\n`));
+      const oldPkg = 'com.derohimat.krosswave';
+      const oldAppName = 'KrossWave'; // typical app name in that repo
+      
+      async function processFolder(dir) {
+        const files = await fs.readdir(dir);
+        for (const file of files) {
+          const fullPath = path.join(dir, file);
+          const stat = await fs.stat(fullPath);
+          
+          if (stat.isDirectory()) {
+            await processFolder(fullPath);
+          } else {
+            const ext = path.extname(fullPath);
+            const validExts = ['.kt', '.xml', '.gradle', '.kts', '.pro', '.properties', '.toml', '.md'];
+            if (validExts.includes(ext) || file === 'gradlew' || file === 'gradlew.bat') {
+              try {
+                let content = await fs.readFile(fullPath, 'utf8');
+                let modified = false;
+                
+                if (content.includes(oldPkg)) {
+                   content = content.replace(new RegExp(oldPkg, 'g'), pkg);
+                   modified = true;
+                }
+                if (content.includes(oldAppName)) {
+                   content = content.replace(new RegExp(oldAppName, 'g'), projectName);
+                   modified = true;
+                }
+                
+                if (modified) {
+                   await fs.writeFile(fullPath, content, 'utf8');
+                }
+              } catch (e) {
+                 // ignore read errors on binary files
+              }
+            }
+          }
+        }
+      }
 
-  for (const d of dirs) {
-    await fs.ensureDir(path.join(targetDir, d));
-  }
+      await processFolder(targetDir);
+      
+      async function restructureDirs(currentDir) {
+          const items = await fs.readdir(currentDir);
+          for (const item of items) {
+              const fullPath = path.join(currentDir, item);
+              if ((await fs.stat(fullPath)).isDirectory()) {
+                  if (fullPath.endsWith(path.join('com', 'derohimat', 'krosswave'))) {
+                      const newPath = fullPath.replace(path.join('com', 'derohimat', 'krosswave'), path.join(...pkg.split('.')));
+                      await fs.move(fullPath, newPath, { overwrite: true });
+                      
+                      const derohimatDir = path.dirname(fullPath);
+                      const comDir = path.dirname(derohimatDir);
+                      try {
+                          await fs.rmdir(derohimatDir);
+                          await fs.rmdir(comDir);      
+                      } catch(e) { }
+                  } else {
+                      await restructureDirs(fullPath);
+                  }
+              }
+          }
+      }
+      await restructureDirs(targetDir);
+      
+      console.log(`  ${chalk.green('✓')} Package renamed to ${pkg}`);
+      console.log(`  ${chalk.green('✓')} App name updated to ${projectName}\n`);
 
-  // ── File Templates ──────────────────────────────────────
-  const files = {};
+    } catch (e) {
+      console.error(chalk.red(`\n❌ Failed to clone or process template: ${e.message}`));
+      process.exit(1);
+    }
+  } else {
+    // Generate Basic Android (existing logic)
+    console.log(chalk.cyan(`\n🔨 Generating Basic Android project structure...\n`));
+    
+    const compileSdk = basicAnswers.targetSdk;
+    const minSdk = basicAnswers.minSdk;
+    const targetSdk = basicAnswers.targetSdk;
 
-  // ── Root build.gradle.kts ───────────────────────────────
-  files['build.gradle.kts'] = `// Top-level build file
+    const dirs = [
+      `app/src/main/java/${pkgPath}`,
+      `app/src/main/java/${pkgPath}/ui/theme`,
+      `app/src/main/java/${pkgPath}/ui/navigation`,
+      `app/src/main/java/${pkgPath}/ui/screens/home`,
+      `app/src/main/java/${pkgPath}/domain/model`,
+      `app/src/main/java/${pkgPath}/domain/usecase`,
+      `app/src/main/java/${pkgPath}/domain/repository`,
+      `app/src/main/java/${pkgPath}/data/repository`,
+      `app/src/main/java/${pkgPath}/data/remote`,
+      `app/src/main/java/${pkgPath}/data/local`,
+      `app/src/main/java/${pkgPath}/di`,
+      `app/src/main/res/drawable`,
+      `app/src/main/res/values`,
+      `app/src/main/res/mipmap-hdpi`,
+      `app/src/test/java/${pkgPath}`,
+      `app/src/androidTest/java/${pkgPath}`,
+      `gradle/wrapper`,
+    ];
+
+    for (const d of dirs) {
+      await fs.ensureDir(path.join(targetDir, d));
+    }
+
+    const files = {};
+    files['build.gradle.kts'] = `// Top-level build file
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -97,8 +191,7 @@ plugins {
 }
 `;
 
-  // ── settings.gradle.kts ─────────────────────────────────
-  files['settings.gradle.kts'] = `pluginManagement {
+    files['settings.gradle.kts'] = `pluginManagement {
     repositories {
         google {
             content {
@@ -123,8 +216,7 @@ rootProject.name = "${projectName}"
 include(":app")
 `;
 
-  // ── gradle/libs.versions.toml ───────────────────────────
-  files['gradle/libs.versions.toml'] = `[versions]
+    files['gradle/libs.versions.toml'] = `[versions]
 agp = "8.7.3"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
@@ -169,8 +261,7 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 `;
 
-  // ── app/build.gradle.kts ────────────────────────────────
-  files['app/build.gradle.kts'] = `plugins {
+    files['app/build.gradle.kts'] = `plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
@@ -247,8 +338,7 @@ dependencies {
 }
 `;
 
-  // ── gradle.properties ───────────────────────────────────
-  files['gradle.properties'] = `# Project-wide Gradle settings.
+    files['gradle.properties'] = `# Project-wide Gradle settings.
 org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
 org.gradle.parallel=true
 org.gradle.caching=true
@@ -257,8 +347,7 @@ kotlin.code.style=official
 android.nonTransitiveRClass=true
 `;
 
-  // ── gradle-wrapper.properties ───────────────────────────
-  files['gradle/wrapper/gradle-wrapper.properties'] = `distributionBase=GRADLE_USER_HOME
+    files['gradle/wrapper/gradle-wrapper.properties'] = `distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 distributionUrl=https\\://services.gradle.org/distributions/gradle-8.9-bin.zip
 networkTimeout=10000
@@ -267,8 +356,7 @@ zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
 `;
 
-  // ── AndroidManifest.xml ─────────────────────────────────
-  files['app/src/main/AndroidManifest.xml'] = `<?xml version="1.0" encoding="utf-8"?>
+    files['app/src/main/AndroidManifest.xml'] = `<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
@@ -291,8 +379,7 @@ zipStorePath=wrapper/dists
 </manifest>
 `;
 
-  // ── Application.kt ──────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/${projectName}Application.kt`] = `package ${pkg}
+    files[`app/src/main/java/${pkgPath}/${projectName}Application.kt`] = `package ${pkg}
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
@@ -301,8 +388,7 @@ import dagger.hilt.android.HiltAndroidApp
 class ${projectName}Application : Application()
 `;
 
-  // ── MainActivity.kt ─────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/MainActivity.kt`] = `package ${pkg}
+    files[`app/src/main/java/${pkgPath}/MainActivity.kt`] = `package ${pkg}
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -326,8 +412,7 @@ class MainActivity : ComponentActivity() {
 }
 `;
 
-  // ── Color.kt ────────────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/ui/theme/Color.kt`] = `package ${pkg}.ui.theme
+    files[`app/src/main/java/${pkgPath}/ui/theme/Color.kt`] = `package ${pkg}.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -340,8 +425,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 `;
 
-  // ── Type.kt ─────────────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/ui/theme/Type.kt`] = `package ${pkg}.ui.theme
+    files[`app/src/main/java/${pkgPath}/ui/theme/Type.kt`] = `package ${pkg}.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -375,8 +459,7 @@ val Typography = Typography(
 )
 `;
 
-  // ── Theme.kt ────────────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/ui/theme/Theme.kt`] = `package ${pkg}.ui.theme
+    files[`app/src/main/java/${pkgPath}/ui/theme/Theme.kt`] = `package ${pkg}.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -423,8 +506,7 @@ fun ${projectName}Theme(
 }
 `;
 
-  // ── Navigation ──────────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/ui/navigation/AppNavHost.kt`] = `package ${pkg}.ui.navigation
+    files[`app/src/main/java/${pkgPath}/ui/navigation/AppNavHost.kt`] = `package ${pkg}.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -443,8 +525,7 @@ fun AppNavHost() {
 }
 `;
 
-  // ── HomeScreen ──────────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/ui/screens/home/HomeScreen.kt`] = `package ${pkg}.ui.screens.home
+    files[`app/src/main/java/${pkgPath}/ui/screens/home/HomeScreen.kt`] = `package ${pkg}.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -482,8 +563,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 }
 `;
 
-  // ── HomeViewModel ───────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/ui/screens/home/HomeViewModel.kt`] = `package ${pkg}.ui.screens.home
+    files[`app/src/main/java/${pkgPath}/ui/screens/home/HomeViewModel.kt`] = `package ${pkg}.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -493,8 +573,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor() : ViewModel()
 `;
 
-  // ── DI AppModule ────────────────────────────────────────
-  files[`app/src/main/java/${pkgPath}/di/AppModule.kt`] = `package ${pkg}.di
+    files[`app/src/main/java/${pkgPath}/di/AppModule.kt`] = `package ${pkg}.di
 
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -507,26 +586,23 @@ object AppModule {
 }
 `;
 
-  // ── res/values ──────────────────────────────────────────
-  files['app/src/main/res/values/strings.xml'] = `<resources>
+    files['app/src/main/res/values/strings.xml'] = `<resources>
     <string name="app_name">${projectName}</string>
 </resources>
 `;
 
-  files['app/src/main/res/values/colors.xml'] = `<?xml version="1.0" encoding="utf-8"?>
+    files['app/src/main/res/values/colors.xml'] = `<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
 `;
 
-  // ── proguard-rules.pro ──────────────────────────────────
-  files['app/proguard-rules.pro'] = `# Add project specific ProGuard rules here.
+    files['app/proguard-rules.pro'] = `# Add project specific ProGuard rules here.
 # -keep class ${pkg}.data.remote.dto.** { *; }
 `;
 
-  // ── .gitignore ──────────────────────────────────────────
-  files['.gitignore'] = `*.iml
+    files['.gitignore'] = `*.iml
 .gradle
 /local.properties
 /.idea
@@ -538,20 +614,19 @@ object AppModule {
 local.properties
 `;
 
-  // ── Write All Files ─────────────────────────────────────
-  let fileCount = 0;
-  for (const [filePath, content] of Object.entries(files)) {
-    const fullPath = path.join(targetDir, filePath);
-    await fs.ensureDir(path.dirname(fullPath));
-    await fs.writeFile(fullPath, content);
-    fileCount++;
-    console.log(`  ${chalk.green('✓')} ${filePath}`);
+    let fileCount = 0;
+    for (const [filePath, content] of Object.entries(files)) {
+      const fullPath = path.join(targetDir, filePath);
+      await fs.ensureDir(path.dirname(fullPath));
+      await fs.writeFile(fullPath, content);
+      fileCount++;
+    }
+
+    console.log(`  ${chalk.green('✓')} Generated ${fileCount} files.`);
   }
 
-  console.log(chalk.bold.green(`\n📁 Generated ${fileCount} files.\n`));
-
   // ── Chain to Skill Wizard ───────────────────────────────
-  console.log(chalk.yellow('⏩ Launching Skill Wizard...\n'));
+  console.log(chalk.yellow('\n⏩ Launching Skill Wizard...\n'));
 
   const originalCwd = process.cwd();
   process.chdir(targetDir);
@@ -560,5 +635,10 @@ local.properties
 
   console.log(chalk.bold.green(`\n🚀 Project "${projectName}" is ready!`));
   console.log(chalk.white(`\n  cd ${projectName}`));
-  console.log(chalk.white(`  ./gradlew assembleDebug\n`));
+  
+  if (answers.templateType === 'kmp') {
+    console.log(chalk.white(`  ./gradlew composeApp:run\n`));
+  } else {
+    console.log(chalk.white(`  ./gradlew assembleDebug\n`));
+  }
 }
