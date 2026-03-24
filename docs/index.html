@@ -4,26 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAD Pro CLI | Modern Android Development Skills</title>
+    <meta name="description" content="Equip your AI agent with 76+ expert Android development patterns — Jetpack Compose, Hilt, Room, Industry Verticals, AI/Gemini, and more.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav-brand">MAD PRO</div>
-        <div class="nav-links">
+    <!-- ─── Navbar ─────────────────────────────────────────────── -->
+    <nav class="nav" id="navbar">
+        <a href="#" class="nav-brand">MAD PRO</a>
+        <div class="nav-links" id="nav-links">
+            <a href="#why" class="nav-link">Why MAD Pro?</a>
             <a href="#how-it-works" class="nav-link">How it Works</a>
             <a href="#skillset" class="nav-link">Skillset</a>
-            <a href="https://github.com/derohimat/MAD-Pro-SKILLS" class="nav-link">GitHub</a>
+            <a href="#get-started" class="nav-link nav-link-cta">Get Started</a>
+            <a href="https://github.com/derohimat/MAD-Pro-SKILLS" class="nav-link" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
+        <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 
+    <!-- ─── Hero ──────────────────────────────────────────────── -->
     <header class="hero">
         <div class="container hero-content">
             <div class="hero-text">
-                <span class="badge">v1.2.0 — 76+ Skills & 23 Industry Verticals</span>
+                <span class="badge">v1.2.0 — 76+ Skills &amp; 23 Industry Verticals</span>
                 <h1>Engineering Experts for your Agent</h1>
                 <p>Equip your AI agent with professional Modern Android Development patterns. Optimized for high-throughput coding with Antigravity, Cursor, Windsurf, and more.</p>
                 
@@ -33,6 +41,11 @@
                         <span class="command">npm install -g mad-pro-cli</span>
                     </div>
                 </div>
+
+                <div class="hero-actions">
+                    <a href="#get-started" class="btn btn-primary">Get Started</a>
+                    <a href="#why" class="btn btn-ghost">Learn Why →</a>
+                </div>
             </div>
             <div class="hero-image">
                 <img src="assets/hero.png" alt="MAD Pro Hero Illustration">
@@ -41,6 +54,8 @@
     </header>
 
     <main class="container">
+
+        <!-- ─── Stats ────────────────────────────────────────────── -->
         <section class="stats">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -62,6 +77,80 @@
             </div>
         </section>
 
+        <!-- ─── Why MAD Pro? ──────────────────────────────────────── -->
+        <section id="why" class="section">
+            <div class="section-label">The Problem</div>
+            <h2 class="section-title">Why Your Android AI Agent Needs This</h2>
+            <p class="section-subtitle">Without expert context, AI agents produce generic, inconsistent code that doesn't follow Modern Android Development principles.</p>
+
+            <!-- Problem vs Solution -->
+            <div class="why-grid">
+                <div class="why-card why-card--problem">
+                    <div class="why-card-header">
+                        <span class="why-icon">😓</span>
+                        <h3>Without MAD Pro</h3>
+                    </div>
+                    <ul class="why-list">
+                        <li>Agent generates outdated XML layouts instead of Compose</li>
+                        <li>Business logic mixed directly into UI — no ViewModel, no Use Cases</li>
+                        <li>No Hilt/DI patterns — manual object construction everywhere</li>
+                        <li>Generic networking code without proper error handling</li>
+                        <li>No industry best practices — every banking/e-commerce feature built from scratch</li>
+                        <li>Inconsistent code style across the project</li>
+                    </ul>
+                </div>
+                <div class="why-card why-card--solution">
+                    <div class="why-card-header">
+                        <span class="why-icon">🚀</span>
+                        <h3>With MAD Pro</h3>
+                    </div>
+                    <ul class="why-list">
+                        <li>Agent follows MAD-compliant Compose + Material 3 patterns</li>
+                        <li>Clean Architecture enforced: UI / Domain / Data layers</li>
+                        <li>Hilt DI, ViewModels, and UseCases wired correctly by default</li>
+                        <li>Production-ready error handling, retry logic, and loading states</li>
+                        <li>23 industry vertical blueprints — Banking, Logistics, Healthcare, and more</li>
+                        <li>Consistent, reviewable, production-grade output every time</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Feature Highlights -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h4>Instant Expert Context</h4>
+                    <p>MAD Pro injects 76+ curated skill files directly into your AI agent's context — turning a generalist agent into an Android architecture expert.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏭</div>
+                    <h4>Industry-Ready Blueprints</h4>
+                    <p>Don't rebuild from scratch. Get battle-tested patterns for Banking, E-Commerce, Ride-Hailing, Healthcare, POS, and 18 more verticals.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Ship Faster, Break Less</h4>
+                    <p>Agents with MAD Pro produce code that follows Google's official recommendations — less review time, fewer architecture corrections, more shipping.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h4>Works with Any AI IDE</h4>
+                    <p>One CLI, 10+ supported IDEs. Cursor, Windsurf, VS Code, Android Studio, IntelliJ — each gets an optimized skill configuration file.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h4>AI & Gemini Integration</h4>
+                    <p>Built-in patterns for Gemini API, LLM streaming UIs, on-device AI, ARCore, and multimodal Android features.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h4>Always Up to Date</h4>
+                    <p>Skills are updated with every Android API evolution. CameraX, Media3, Glance, Play Billing v7 — your agent stays current automatically.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── How it Works ─────────────────────────────────────── -->
         <section id="how-it-works" class="section">
             <h2 class="section-title">How It Works</h2>
             <div class="timeline">
@@ -69,7 +158,7 @@
                     <div class="timeline-dot">1</div>
                     <div class="timeline-content">
                         <h3>Global Installation</h3>
-                        <p>Install the MAD Pro CLI globally to manage skills across all your Android projects.</p>
+                        <p>Install the MAD Pro CLI globally — available across all your Android projects instantly.</p>
                         <div class="terminal" style="margin-top: 1rem; padding: 1rem;">
                             <div class="code-line"><span class="prompt">$</span><span>npm install -g mad-pro-cli</span></div>
                         </div>
@@ -79,7 +168,7 @@
                     <div class="timeline-dot">2</div>
                     <div class="timeline-content">
                         <h3>IDE-Specific Init</h3>
-                        <p>Initialize skills tailored for your specific environment (Cursor, VS Code, Windsurf, etc.).</p>
+                        <p>Run <code style="color:var(--primary); font-family:'JetBrains Mono',monospace;">mad-pro init</code> inside your Android project root. MAD Pro detects your IDE and copies the correct skill structure.</p>
                         <div class="terminal" style="margin-top: 1rem; padding: 1rem;">
                             <div class="code-line"><span class="prompt">$</span><span>mad-pro init --ide cursor</span></div>
                         </div>
@@ -89,24 +178,25 @@
                     <div class="timeline-dot">3</div>
                     <div class="timeline-content">
                         <h3>Agent Empowerment</h3>
-                        <p>Your AI agent automatically detects the industry-standard patterns and builds high-quality Android apps.</p>
+                        <p>Your AI agent automatically reads the skill context and starts producing architecture-compliant, production-grade Android code — no additional prompting needed.</p>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- ─── IDE Support ───────────────────────────────────────── -->
         <section id="ide-support" class="section">
             <h2 class="section-title">IDE Ecosystem Support</h2>
             <div class="ide-grid">
                 <div class="ide-card" data-ide="vscode">
                     <div class="ide-icon">💻</div>
                     <h4>VS Code</h4>
-                    <p>Native agents & command integration</p>
+                    <p>Native agents &amp; command integration</p>
                 </div>
                 <div class="ide-card" data-ide="cursor">
                     <div class="ide-icon">🚀</div>
                     <h4>Cursor</h4>
-                    <p>Optimized for Composer & MCP</p>
+                    <p>Optimized for Composer &amp; MCP</p>
                 </div>
                 <div class="ide-card" data-ide="windsurf">
                     <div class="ide-icon">🌊</div>
@@ -143,7 +233,6 @@
                     <h4>Code Insiders</h4>
                     <p>Early access feature support</p>
                 </div>
-                <!-- Expansion Batch -->
                 <div class="ide-card" data-ide="antigravity">
                     <div class="ide-icon">🪐</div>
                     <h4>Antigravity IDE</h4>
@@ -162,7 +251,7 @@
                 <div class="ide-card" data-ide="xcode">
                     <div class="ide-icon">🛠️</div>
                     <h4>Xcode</h4>
-                    <p>KMP & Swift-bridge skills</p>
+                    <p>KMP &amp; Swift-bridge skills</p>
                 </div>
                 <div class="ide-card" data-ide="webstorm">
                     <div class="ide-icon">🌐</div>
@@ -185,17 +274,12 @@
         <script>
             document.querySelectorAll('.ide-card').forEach(card => {
                 card.addEventListener('click', () => {
-                    // Update active state
                     document.querySelectorAll('.ide-card').forEach(c => c.classList.remove('active'));
                     card.classList.add('active');
-
-                    // Update command
                     const ide = card.getAttribute('data-ide');
                     const ideName = card.querySelector('h4').textContent;
                     document.getElementById('generated-command').textContent = `mad-pro init --ide ${ide}`;
                     document.getElementById('selected-ide-name').textContent = ideName;
-                    
-                    // Reset copy button
                     const copyText = document.getElementById('copy-text');
                     copyText.textContent = 'Copy';
                 });
@@ -206,16 +290,14 @@
                 navigator.clipboard.writeText(command).then(() => {
                     const copyText = document.getElementById('copy-text');
                     copyText.textContent = 'Copied!';
-                    setTimeout(() => {
-                        copyText.textContent = 'Copy';
-                    }, 2000);
+                    setTimeout(() => { copyText.textContent = 'Copy'; }, 2000);
                 });
             });
             
-            // Set default active
             document.querySelector('[data-ide="vscode"]').classList.add('active');
         </script>
 
+        <!-- ─── Tech Stack ────────────────────────────────────────── -->
         <section class="section" style="border-top: 1px solid var(--glass-border); padding-top: 4rem;">
             <div class="tech-stack">
                 <div class="tech-item">Android Studio</div>
@@ -227,6 +309,7 @@
             </div>
         </section>
 
+        <!-- ─── Skillset ──────────────────────────────────────────── -->
         <section id="skillset" class="section">
             <h2 class="section-title">Comprehensive MAD Skillset</h2>
             
@@ -239,14 +322,14 @@
                 <div class="skill-grid">
                     <div class="skill-item"><h4>Jetpack Compose</h4><span>Declarative UI foundations</span></div>
                     <div class="skill-item"><h4>Material 3</h4><span>Standardized theming</span></div>
-                    <div class="skill-item"><h4>State Management</h4><span>UDF & ViewModels</span></div>
+                    <div class="skill-item"><h4>State Management</h4><span>UDF &amp; ViewModels</span></div>
                     <div class="skill-item"><h4>Navigation</h4><span>Type-safe routes</span></div>
                     <div class="skill-item"><h4>Modifiers</h4><span>Compositional styling</span></div>
-                    <div class="skill-item"><h4>Layouts</h4><span>Scaffolding & Grids</span></div>
-                    <div class="skill-item"><h4>Advanced UI</h4><span>Canvas & Custom Graphics</span></div>
+                    <div class="skill-item"><h4>Layouts</h4><span>Scaffolding &amp; Grids</span></div>
+                    <div class="skill-item"><h4>Advanced UI</h4><span>Canvas &amp; Custom Graphics</span></div>
                     <div class="skill-item"><h4>Adaptive Layouts</h4><span>Multi-device support</span></div>
                     <div class="skill-item"><h4>Accessibility</h4><span>Inclusive engineering</span></div>
-                    <div class="skill-item"><h4>Motion</h4><span>Animations & Transitions</span></div>
+                    <div class="skill-item"><h4>Motion</h4><span>Animations &amp; Transitions</span></div>
                 </div>
             </div>
 
@@ -287,13 +370,13 @@
                 </div>
                 <div class="skill-grid">
                     <div class="skill-item"><h4>Modularization</h4><span>Multi-module scaling</span></div>
-                    <div class="skill-item"><h4>Dependency Injection</h4><span>Hilt & Koin</span></div>
-                    <div class="skill-item"><h4>Concurrency</h4><span>Coroutines & Flows</span></div>
-                    <div class="skill-item"><h4>Testing</h4><span>UI & Unit tests</span></div>
-                    <div class="skill-item"><h4>Performance</h4><span>Benchmarks & Profiles</span></div>
+                    <div class="skill-item"><h4>Dependency Injection</h4><span>Hilt &amp; Koin</span></div>
+                    <div class="skill-item"><h4>Concurrency</h4><span>Coroutines &amp; Flows</span></div>
+                    <div class="skill-item"><h4>Testing</h4><span>UI &amp; Unit tests</span></div>
+                    <div class="skill-item"><h4>Performance</h4><span>Benchmarks &amp; Profiles</span></div>
                     <div class="skill-item"><h4>Design Systems</h4><span>Tokens at scale</span></div>
-                    <div class="skill-item"><h4>Observability</h4><span>Logging & Monitoring</span></div>
-                    <div class="skill-item"><h4>CI/CD</h4><span>GitHub Actions & Fastlane</span></div>
+                    <div class="skill-item"><h4>Observability</h4><span>Logging &amp; Monitoring</span></div>
+                    <div class="skill-item"><h4>CI/CD</h4><span>GitHub Actions &amp; Fastlane</span></div>
                 </div>
             </div>
 
@@ -301,14 +384,14 @@
             <div class="category-group">
                 <div class="category-header">
                     <span class="category-icon">🚀</span>
-                    <h2>Advanced & Ecosystem</h2>
+                    <h2>Advanced &amp; Ecosystem</h2>
                 </div>
                 <div class="skill-grid">
                     <div class="skill-item"><h4>Multiplatform (KMP)</h4><span>Logic sharing</span></div>
                     <div class="skill-item"><h4>Compose Multiplatform</h4><span>UI sharing</span></div>
                     <div class="skill-item"><h4>On-Device AI</h4><span>Gemini Nano integration</span></div>
                     <div class="skill-item"><h4>Deep Links</h4><span>Nav verified entry points</span></div>
-                    <div class="skill-item"><h4>Security</h4><span>Biometrics & Encrypted storage</span></div>
+                    <div class="skill-item"><h4>Security</h4><span>Biometrics &amp; Encrypted storage</span></div>
                     <div class="skill-item"><h4>Google Play Skills</h4><span>Store compliance</span></div>
                 </div>
             </div>
@@ -320,12 +403,12 @@
                     <h2>Platform Capabilities</h2>
                 </div>
                 <div class="skill-grid">
-                    <div class="skill-item"><h4>Widget & Glance</h4><span>Home & lock screen widgets</span></div>
-                    <div class="skill-item"><h4>App Shortcuts</h4><span>Static, dynamic & pinned</span></div>
-                    <div class="skill-item"><h4>Camera & Media</h4><span>CameraX, capture & playback</span></div>
-                    <div class="skill-item"><h4>Barcode & QR Code</h4><span>ML Kit scanner & QR gen</span></div>
-                    <div class="skill-item"><h4>Image Editing</h4><span>Crop, filters & annotation</span></div>
-                    <div class="skill-item"><h4>Voice & Speech</h4><span>STT, TTS & waveform</span></div>
+                    <div class="skill-item"><h4>Widget &amp; Glance</h4><span>Home &amp; lock screen widgets</span></div>
+                    <div class="skill-item"><h4>App Shortcuts</h4><span>Static, dynamic &amp; pinned</span></div>
+                    <div class="skill-item"><h4>Camera &amp; Media</h4><span>CameraX, capture &amp; playback</span></div>
+                    <div class="skill-item"><h4>Barcode &amp; QR Code</h4><span>ML Kit scanner &amp; QR gen</span></div>
+                    <div class="skill-item"><h4>Image Editing</h4><span>Crop, filters &amp; annotation</span></div>
+                    <div class="skill-item"><h4>Voice &amp; Speech</h4><span>STT, TTS &amp; waveform</span></div>
                 </div>
             </div>
 
@@ -333,12 +416,12 @@
             <div class="category-group">
                 <div class="category-header">
                     <span class="category-icon">🤖</span>
-                    <h2>AI & Emerging Tech</h2>
+                    <h2>AI &amp; Emerging Tech</h2>
                 </div>
                 <div class="skill-grid">
-                    <div class="skill-item"><h4>Gemini API</h4><span>Text, vision & function calling</span></div>
-                    <div class="skill-item"><h4>LLM UI Patterns</h4><span>Streaming, typewriter & chat UX</span></div>
-                    <div class="skill-item"><h4>ARCore</h4><span>Product placement & face filters</span></div>
+                    <div class="skill-item"><h4>Gemini API</h4><span>Text, vision &amp; function calling</span></div>
+                    <div class="skill-item"><h4>LLM UI Patterns</h4><span>Streaming, typewriter &amp; chat UX</span></div>
+                    <div class="skill-item"><h4>ARCore</h4><span>Product placement &amp; face filters</span></div>
                 </div>
             </div>
 
@@ -361,28 +444,28 @@
                     <h2>Industry Skills</h2>
                 </div>
                 <div class="skill-grid">
-                    <div class="skill-item"><h4>Banking & Finance</h4><span>Account dashboards & biometric auth</span></div>
-                    <div class="skill-item"><h4>Payment Gateway</h4><span>Card tokenization & 3DS flows</span></div>
-                    <div class="skill-item"><h4>E-Commerce</h4><span>Cart, checkout & order tracking</span></div>
-                    <div class="skill-item"><h4>Product Catalog</h4><span>Paging 3, search & galleries</span></div>
-                    <div class="skill-item"><h4>Ride-Hailing</h4><span>Real-time maps & booking flow</span></div>
-                    <div class="skill-item"><h4>On-Demand Services</h4><span>Order lifecycle & ETA</span></div>
-                    <div class="skill-item"><h4>Food Delivery</h4><span>Menu, cart & delivery tracking</span></div>
-                    <div class="skill-item"><h4>Healthcare</h4><span>Teleconsultation & HIPAA</span></div>
-                    <div class="skill-item"><h4>EdTech</h4><span>Video player, quiz & certificates</span></div>
-                    <div class="skill-item"><h4>Property</h4><span>Map listing & mortgage calc</span></div>
-                    <div class="skill-item"><h4>Social Feed</h4><span>Timeline, stories & likes</span></div>
-                    <div class="skill-item"><h4>Real-Time Chat</h4><span>WebSocket & message bubbles</span></div>
-                    <div class="skill-item"><h4>Government & Public Sector</h4><span>eID auth & WCAG compliance</span></div>
-                    <div class="skill-item"><h4>Web3 & Crypto</h4><span>WalletConnect & NFT gallery</span></div>
-                    <div class="skill-item"><h4>Hardware Integration</h4><span>BLE, NFC & USB serial</span></div>
-                    <div class="skill-item"><h4>Logistics & Fleet</h4><span>Fleet map & route optimization</span></div>
-                    <div class="skill-item"><h4>Insurance</h4><span>Policy, claims & premium calc</span></div>
-                    <div class="skill-item"><h4>HR & Attendance</h4><span>GPS clock-in & payslip</span></div>
-                    <div class="skill-item"><h4>POS & Retail</h4><span>Checkout & Bluetooth printer</span></div>
-                    <div class="skill-item"><h4>Travel Booking</h4><span>Flights, seat picker & boarding pass</span></div>
-                    <div class="skill-item"><h4>Gaming & Leaderboard</h4><span>Achievements & in-game store</span></div>
-                    <div class="skill-item"><h4>Media Streaming</h4><span>ExoPlayer, DRM & PiP</span></div>
+                    <div class="skill-item"><h4>Banking &amp; Finance</h4><span>Account dashboards &amp; biometric auth</span></div>
+                    <div class="skill-item"><h4>Payment Gateway</h4><span>Card tokenization &amp; 3DS flows</span></div>
+                    <div class="skill-item"><h4>E-Commerce</h4><span>Cart, checkout &amp; order tracking</span></div>
+                    <div class="skill-item"><h4>Product Catalog</h4><span>Paging 3, search &amp; galleries</span></div>
+                    <div class="skill-item"><h4>Ride-Hailing</h4><span>Real-time maps &amp; booking flow</span></div>
+                    <div class="skill-item"><h4>On-Demand Services</h4><span>Order lifecycle &amp; ETA</span></div>
+                    <div class="skill-item"><h4>Food Delivery</h4><span>Menu, cart &amp; delivery tracking</span></div>
+                    <div class="skill-item"><h4>Healthcare</h4><span>Teleconsultation &amp; HIPAA</span></div>
+                    <div class="skill-item"><h4>EdTech</h4><span>Video player, quiz &amp; certificates</span></div>
+                    <div class="skill-item"><h4>Property</h4><span>Map listing &amp; mortgage calc</span></div>
+                    <div class="skill-item"><h4>Social Feed</h4><span>Timeline, stories &amp; likes</span></div>
+                    <div class="skill-item"><h4>Real-Time Chat</h4><span>WebSocket &amp; message bubbles</span></div>
+                    <div class="skill-item"><h4>Government &amp; Public Sector</h4><span>eID auth &amp; WCAG compliance</span></div>
+                    <div class="skill-item"><h4>Web3 &amp; Crypto</h4><span>WalletConnect &amp; NFT gallery</span></div>
+                    <div class="skill-item"><h4>Hardware Integration</h4><span>BLE, NFC &amp; USB serial</span></div>
+                    <div class="skill-item"><h4>Logistics &amp; Fleet</h4><span>Fleet map &amp; route optimization</span></div>
+                    <div class="skill-item"><h4>Insurance</h4><span>Policy, claims &amp; premium calc</span></div>
+                    <div class="skill-item"><h4>HR &amp; Attendance</h4><span>GPS clock-in &amp; payslip</span></div>
+                    <div class="skill-item"><h4>POS &amp; Retail</h4><span>Checkout &amp; Bluetooth printer</span></div>
+                    <div class="skill-item"><h4>Travel Booking</h4><span>Flights, seat picker &amp; boarding pass</span></div>
+                    <div class="skill-item"><h4>Gaming &amp; Leaderboard</h4><span>Achievements &amp; in-game store</span></div>
+                    <div class="skill-item"><h4>Media Streaming</h4><span>ExoPlayer, DRM &amp; PiP</span></div>
                 </div>
             </div>
 
@@ -393,23 +476,117 @@
                     <h2>Cross-Industry Technical</h2>
                 </div>
                 <div class="skill-grid">
-                    <div class="skill-item"><h4>Real-Time Sync</h4><span>WebSocket, RTDB & SSE</span></div>
-                    <div class="skill-item"><h4>Maps & Location</h4><span>Google Maps & geofencing</span></div>
-                    <div class="skill-item"><h4>Push Notifications</h4><span>FCM & deep links</span></div>
-                    <div class="skill-item"><h4>In-App Payments</h4><span>Play Billing & subscriptions</span></div>
-                    <div class="skill-item"><h4>Google Play Subscriptions</h4><span>Trial, yearly, plan switch & lifecycle</span></div>
-                    <div class="skill-item"><h4>Analytics & Tracking</h4><span>Funnel analysis & user props</span></div>
-                    <div class="skill-item"><h4>Offline-First</h4><span>Room sync & conflict resolution</span></div>
+                    <div class="skill-item"><h4>Real-Time Sync</h4><span>WebSocket, RTDB &amp; SSE</span></div>
+                    <div class="skill-item"><h4>Maps &amp; Location</h4><span>Google Maps &amp; geofencing</span></div>
+                    <div class="skill-item"><h4>Push Notifications</h4><span>FCM &amp; deep links</span></div>
+                    <div class="skill-item"><h4>In-App Payments</h4><span>Play Billing &amp; subscriptions</span></div>
+                    <div class="skill-item"><h4>Google Play Subscriptions</h4><span>Trial, yearly, plan switch &amp; lifecycle</span></div>
+                    <div class="skill-item"><h4>Analytics &amp; Tracking</h4><span>Funnel analysis &amp; user props</span></div>
+                    <div class="skill-item"><h4>Offline-First</h4><span>Room sync &amp; conflict resolution</span></div>
                 </div>
             </div>
         </section>
+
+        <!-- ─── Get Started CTA ───────────────────────────────────── -->
+        <section id="get-started" class="section cta-section">
+            <div class="cta-card">
+                <div class="cta-glow"></div>
+                <span class="badge" style="margin-bottom:1.5rem;">Ready to Install</span>
+                <h2 class="cta-title">Upgrade Your Agent in 60 Seconds</h2>
+                <p class="cta-sub">One command installs 76+ expert skills into your Android project. Works with every major AI-powered IDE.</p>
+                <div class="cta-steps">
+                    <div class="cta-terminal">
+                        <div class="code-line">
+                            <span class="prompt">$</span>
+                            <span class="command">npm install -g mad-pro-cli</span>
+                        </div>
+                        <div class="code-line" style="margin-top:0.75rem;">
+                            <span class="prompt">$</span>
+                            <span class="command">cd your-android-project</span>
+                        </div>
+                        <div class="code-line" style="margin-top:0.75rem;">
+                            <span class="prompt">$</span>
+                            <span class="command">mad-pro init --ide cursor</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-actions">
+                    <a href="https://github.com/derohimat/MAD-Pro-SKILLS" class="btn btn-primary" target="_blank" rel="noopener">View on GitHub ↗</a>
+                    <a href="#how-it-works" class="btn btn-ghost">See How it Works</a>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 MAD Pro CLI. <a href="https://github.com/derohimat/MAD-Pro-SKILLS" style="color: var(--primary); text-decoration: none;">View on GitHub</a></p>
+            <p>&copy; 2026 MAD Pro CLI. <a href="https://github.com/derohimat/MAD-Pro-SKILLS" style="color: var(--primary); text-decoration: none;" target="_blank" rel="noopener">View on GitHub</a></p>
             <p style="margin-top: 0.5rem; font-size: 0.75rem;">Powered by Modern Android Development Principles.</p>
         </div>
     </footer>
+
+    <script>
+        // ── Active nav link on scroll ──────────────────────────────
+        const sections = document.querySelectorAll('section[id], header');
+        const navLinks = document.querySelectorAll('.nav-link:not(.nav-link-cta)');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    const id = entry.target.getAttribute('id');
+                    const active = document.querySelector(`.nav-link[href="#${id}"]`);
+                    if (active) active.classList.add('active');
+                }
+            });
+        }, { threshold: 0.35 });
+
+        sections.forEach(s => observer.observe(s));
+
+        // ── Navbar scroll shadow ───────────────────────────────────
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            navbar.classList.toggle('nav--scrolled', window.scrollY > 20);
+        });
+
+        // ── Hamburger menu ─────────────────────────────────────────
+        const hamburger = document.getElementById('hamburger');
+        const navLinksEl = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            navLinksEl.classList.toggle('open');
+        });
+        // Close when clicking a link
+        navLinksEl.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinksEl.classList.remove('open');
+            });
+        });
+
+        // ── Counter animation ──────────────────────────────────────
+        function animateCounter(el) {
+            const target = parseInt(el.textContent.replace(/\D/g,''));
+            const suffix = el.textContent.replace(/[0-9]/g,'');
+            let start = 0;
+            const step = Math.ceil(target / 40);
+            const tick = setInterval(() => {
+                start = Math.min(start + step, target);
+                el.textContent = start + suffix;
+                if (start >= target) clearInterval(tick);
+            }, 30);
+        }
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.stat-number').forEach(animateCounter);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) statsObserver.observe(statsSection);
+    </script>
 </body>
 </html>
