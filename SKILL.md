@@ -70,6 +70,76 @@ Follow these core principles:
 - **[Compose to CMP](references/cmp_migration.md)**: Sharing UI across platforms.
 - **[Automation & CI/CD](references/automation_cicd.md)**: GitHub Actions and Fastlane pipelines.
 
+## Industry Skills
+
+Domain-specific patterns for building real-world production apps across major industry verticals.
+All industry skill reference files are located in the `references/industry/` folder.
+
+### 7. Banking & Financial
+
+- **[Banking & Finance](references/industry/banking_finance.md)**: Account dashboards, transaction history, biometric auth, masked data, and bank-grade security.
+- **[Payment Gateway](references/industry/payment_gateway.md)**: Card tokenization, 3DS flows, payment status polling, and idempotent requests.
+
+### 8. E-Commerce & Retail
+
+- **[E-Commerce](references/industry/ecommerce.md)**: Product grids, cart management, checkout stepper, order tracking, and wishlist.
+- **[Product Catalog](references/industry/product_catalog.md)**: Paging 3, filter/sort sheets, search debounce, image galleries, and skeleton loading.
+
+### 9. On-Demand & Mobility
+
+- **[Ride-Hailing](references/industry/ride_hailing.md)**: Google Maps integration, real-time driver tracking, booking flow, and fare estimation.
+- **[On-Demand Services](references/industry/on_demand.md)**: Order lifecycle, FCM status updates, ETA countdown, and provider rating.
+- **[Food Delivery](references/industry/food_delivery.md)**: Restaurant listing, menu customization, cart summary, delivery tracking map, and vouchers.
+
+### 10. Healthcare
+
+- **[Healthcare](references/industry/healthcare.md)**: Appointment booking, doctor listing, health metrics dashboard, teleconsultation, and HIPAA compliance.
+
+### 11. Education
+
+- **[EdTech](references/industry/edtech.md)**: Course catalog, ExoPlayer video with chapters, quiz engine, progress tracking, and certificate generation.
+
+### 12. Property & Real Estate
+
+- **[Property](references/industry/property.md)**: Map/list toggle, property card, advanced filter, mortgage calculator, and virtual tour.
+
+### 13. Social & Communication
+
+- **[Social Feed](references/industry/social_feed.md)**: Paging 3 timeline, post card, animated like button, stories UI, and notification feed.
+- **[Real-Time Chat](references/industry/realtime_chat.md)**: Message bubbles, WebSocket client, typing indicator, chat input bar, and Room persistence.
+
+### 14. Government & Public Sector
+
+- **[Government & Public Sector](references/industry/government.md)**: eID OAuth2 auth, public services dashboard, document submission, WCAG compliance, and offline-capable forms.
+
+### 15. Web3 & Crypto
+
+- **[Web3 & Crypto](references/industry/web3_crypto.md)**: WalletConnect integration, token portfolio UI, transaction signing, NFT gallery, and price charts.
+
+### 16. Hardware Integration
+
+- **[Hardware Integration](references/industry/hardware_integration.md)**: BLE device scanning, NFC read/write, USB serial communication, IoT sensor dashboard, and hardware permissions.
+
+## Cross-Industry Technical Skills
+
+Foundational capabilities that power multiple industry app categories.
+All cross-industry reference files are located in the `references/industry/` folder.
+
+### 17. Real-Time & Connectivity
+
+- **[Real-Time Sync](references/industry/real_time_sync.md)**: WebSocket with reconnection, Firebase RTDB, SSE, optimistic updates, and connection banners.
+- **[Maps & Location](references/industry/maps_location.md)**: Google Maps Compose, location permissions, FusedLocationProvider, geocoding, polylines, and geofencing.
+- **[Push Notifications](references/industry/push_notifications.md)**: FCM setup, notification channels, Android 13+ permission, deep links, and topic subscriptions.
+
+### 18. Monetization
+
+- **[In-App Payments](references/industry/in_app_payments.md)**: Google Play Billing, subscriptions, one-time purchases, server-side verification, and paywall UI.
+
+### 19. Data & Observability
+
+- **[Analytics & Tracking](references/industry/analytics_tracking.md)**: Event naming conventions, tracker abstraction, screen tracking, funnel tracking, and user properties.
+- **[Offline-First](references/industry/offline_first.md)**: Single source of truth, NetworkMonitor, WorkManager sync, optimistic create, and conflict resolution.
+
 ## Code Style
 
 - Use trailing commas for all composable parameters.
