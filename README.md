@@ -1,4 +1,4 @@
-# MAD Pro CLI 🚀 
+# MAD Pro CLI 🚀
 
 **Engineering Experts for your AI Agent.** Equip your development environment with 76+ professional Modern Android Development (MAD) patterns across 26 categories and 23 industry verticals.
 
@@ -22,25 +22,32 @@ From **Clean Architecture** and **Hilt DI** to **Banking SDKs** and **Gemini AI*
 MAD Pro now features a **Smart Wizard** for selective initialization. No more cluttering your project with unused skills.
 
 ### 1. Global Installation
+
 ```bash
 npm install -g mad-pro-cli
 ```
 
 ### 2. Smart Initialization
+
 Run the wizard inside your Android project root:
+
 ```bash
 mad-pro init
 ```
+
 *The wizard will ask for your IDE (Cursor, VS Code, etc.) and let you pick specific categories like Core MAD, AI, or specific Industry Verticals.*
 
 ### 3. On-Demand Expansion
+
 Need a specific skill later?
+
 ```bash
 # Search and add any skill from the 76+ library
 mad-pro add
 ```
 
 ### 4. Inventory Check
+
 ```bash
 mad-pro list
 ```
@@ -68,7 +75,9 @@ mad-pro list
 ---
 
 ## 🏭 23 Industry Verticals
+
 Get battle-tested blueprints for specific domains:
+
 - **Banking & Finance**
 - **E-Commerce & Retail**
 - **Logistics & Fleet**
@@ -82,6 +91,7 @@ Get battle-tested blueprints for specific domains:
 ---
 
 ## 🗺️ Visual Documentation
+
 Visit our **[Premium Documentation Site](https://derohimat.github.io/MAD-Pro-SKILLS/)** for an interactive skill catalog and IDE selection guides.
 
 ---
@@ -96,7 +106,9 @@ Visit our **[Premium Documentation Site](https://derohimat.github.io/MAD-Pro-SKI
 ---
 
 ## 🤝 Contributing
+
 Contributions are welcome! If you have a professional-grade MAD pattern, please open a PR.
 
 ## 📄 License
+
 This project is licensed under the MIT License.

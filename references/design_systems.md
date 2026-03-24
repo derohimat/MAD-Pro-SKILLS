@@ -1,47 +1,81 @@
-# Design Systems at Scale
+# Design Systems & Theming (MAD Pro)
 
-A professional Design System goes beyond basic theming. It provides a common language between designers and developers.
+## 🏗️ Architecture: Design Tokens
 
-## 1. Design Tokens
+A scalable Android app doesn't use hardcoded colors. Use **Design Tokens** to bridge Design and Development.
 
-Tokens are the smallest pieces of the design system: colors, spacing, typography, and elevation stored as data.
+### 🎨 Color Palette (Material 3)
 
-### Standard Token Structure
-
-- **Primitive Tokens**: `blue-500`, `spacing-16`.
-- **Semantic Tokens**: `color-primary`, `spacing-medium`.
-- **Component Tokens**: `button-background-color`.
-
-## 2. Shared Component Library
-
-Encapsulate Material 3 components into your own brand-specific wrappers to ensure consistency.
+Define your core brand colors in `Color.kt` and map them to a `ColorScheme`.
 
 ```kotlin
-@Composable
-fun MadButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
-        shape = MadTheme.shapes.button, // Custom shape from tokens
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MadTheme.colors.primary
-        )
-    ) {
-        Text(text = text, style = MadTheme.typography.label)
-    }
+// ui/theme/Color.kt
+val MdPurple80 = Color(0xFFD0BCFF)
+val MdPurple40 = Color(0xFF6650a4)
+// ...
+
+// ui/theme/Theme.kt
+private val DarkColorScheme = darkColorScheme(
+    primary = MdPurple80,
+    secondary = MdPurpleGrey80,
+    // ...
+)
+```
+
+## 📐 Typography System
+
+Standardize text styles using `MaterialTheme.typography`.
+
+| Style | Use Case |
+| :--- | :--- |
+| `displayLarge` | Hero numbers, prominent headers |
+| `titleMedium` | Section titles, list headers |
+| `bodyLarge` | Main content text |
+| `labelSmall` | Captions, legal text |
+
+```kotlin
+// ui/theme/Type.kt
+val Typography = Typography(
+    bodyLarge = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    )
+)
+```
+
+## 🧊 Shape & Spacing (8dp Grid)
+
+Always use multiples of 8dp for margins and paddings.
+
+```kotlin
+object AppSpacing {
+    val xSmall = 4.dp
+    val small = 8.dp
+    val medium = 16.dp
+    val large = 32.dp
 }
 ```
 
-## 3. Documentation (Showcase)
+## 🚀 Implementation Rule
 
-Create a "Catalog" or "Showcase" app within your project to view and test components in isolation.
+1. **Never** hardcode `Color(0xFF...)` in a screen. Use `MaterialTheme.colorScheme.primary`.
+2. **Never** use `16.sp` directly. Use `MaterialTheme.typography.bodyLarge`.
+3. Use **CompositionLocals** if you need custom design tokens (e.g., specific brand spacing).
 
-- Use **Compose Previews** extensively with different configurations (Dark mode, Large font).
-- Consider tools like **Showkase** to automatically generate a component browser.
-- Use **Screenshot Testing** (Paparazzi or Roborazzi) to prevent visual regressions.
+```kotlin
+@Composable
+fun MyComponent() {
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        contentColor = MaterialTheme.colorScheme.onSurface
+    ) {
+        Text(
+            text = "MAD Pro Standard",
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+```
