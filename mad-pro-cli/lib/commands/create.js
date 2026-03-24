@@ -6,13 +6,15 @@ import initCommand from './init.js';
 
 export default async function createCommand(projectName) {
   console.log(chalk.bold.magenta('\n🏗️  MAD Pro - New Project Scaffold'));
-  
+  console.log(chalk.gray('Generate a production-ready Android project with Clean Architecture.\n'));
+
   if (!projectName) {
     const res = await inquirer.prompt([{
       type: 'input',
       name: 'name',
-      message: 'Enter your project name:',
-      default: 'MyMadApp'
+      message: 'Project name:',
+      default: 'MyMadApp',
+      validate: v => /^[A-Za-z][A-Za-z0-9]*$/.test(v) || 'Must start with a letter, alphanumeric only.'
     }]);
     projectName = res.name;
   }
@@ -21,110 +23,542 @@ export default async function createCommand(projectName) {
     {
       type: 'input',
       name: 'package',
-      message: 'Package Name:',
-      default: `com.example.${projectName.toLowerCase()}`
+      message: 'Package name:',
+      default: `com.example.${projectName.toLowerCase()}`,
+      validate: v => /^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)+$/.test(v) || 'Invalid package (e.g. com.example.app)'
     },
     {
       type: 'list',
       name: 'minSdk',
-      message: 'Minimum SDK Version:',
+      message: 'Minimum SDK:',
       choices: ['24', '26', '28', '30'],
       default: '26'
+    },
+    {
+      type: 'list',
+      name: 'targetSdk',
+      message: 'Target SDK:',
+      choices: ['34', '35'],
+      default: '35'
     }
   ]);
 
   const targetDir = path.join(process.cwd(), projectName);
 
   if (fs.existsSync(targetDir)) {
-    console.error(chalk.red(`Error: Directory ${projectName} already exists!`));
+    console.error(chalk.red(`\n❌ Directory "${projectName}" already exists.`));
     process.exit(1);
   }
 
-  console.log(chalk.cyan(`\n🔨 Scaffolding project in ${targetDir}...`));
+  console.log(chalk.cyan(`\n🔨 Generating project structure...\n`));
 
-  // 1. Create Base Folders
-  const folders = [
-    'app/src/main/java/' + answers.package.replace(/\./g, '/'),
-    'app/src/main/res/drawable',
-    'app/src/main/res/values',
-    'gradle/wrapper',
-    'references'
+  const pkg = answers.package;
+  const pkgPath = pkg.replace(/\./g, '/');
+  const compileSdk = answers.targetSdk;
+  const minSdk = answers.minSdk;
+  const targetSdk = answers.targetSdk;
+
+  // ── Directory Tree ──────────────────────────────────────
+  const dirs = [
+    `app/src/main/java/${pkgPath}`,
+    `app/src/main/java/${pkgPath}/ui/theme`,
+    `app/src/main/java/${pkgPath}/ui/navigation`,
+    `app/src/main/java/${pkgPath}/ui/screens/home`,
+    `app/src/main/java/${pkgPath}/domain/model`,
+    `app/src/main/java/${pkgPath}/domain/usecase`,
+    `app/src/main/java/${pkgPath}/domain/repository`,
+    `app/src/main/java/${pkgPath}/data/repository`,
+    `app/src/main/java/${pkgPath}/data/remote`,
+    `app/src/main/java/${pkgPath}/data/local`,
+    `app/src/main/java/${pkgPath}/di`,
+    `app/src/main/res/drawable`,
+    `app/src/main/res/values`,
+    `app/src/main/res/mipmap-hdpi`,
+    `app/src/test/java/${pkgPath}`,
+    `app/src/androidTest/java/${pkgPath}`,
+    `gradle/wrapper`,
   ];
 
-  for (const folder of folders) {
-    await fs.ensureDir(path.join(targetDir, folder));
+  for (const d of dirs) {
+    await fs.ensureDir(path.join(targetDir, d));
   }
 
-  // 2. Simple Boilerplate Templates
-  const packagePath = answers.package.replace(/\./g, '/');
-  
-  // build.gradle.kts (App level)
-  const buildGradle = `plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
+  // ── File Templates ──────────────────────────────────────
+  const files = {};
+
+  // ── Root build.gradle.kts ───────────────────────────────
+  files['build.gradle.kts'] = `// Top-level build file
+plugins {
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.hilt.android) apply false
+    alias(libs.plugins.ksp) apply false
+}
+`;
+
+  // ── settings.gradle.kts ─────────────────────────────────
+  files['settings.gradle.kts'] = `pluginManagement {
+    repositories {
+        google {
+            content {
+                includeGroupByRegex("com\\\\.android.*")
+                includeGroupByRegex("com\\\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "${projectName}"
+include(":app")
+`;
+
+  // ── gradle/libs.versions.toml ───────────────────────────
+  files['gradle/libs.versions.toml'] = `[versions]
+agp = "8.7.3"
+kotlin = "2.1.0"
+ksp = "2.1.0-1.0.29"
+coreKtx = "1.15.0"
+lifecycle = "2.8.7"
+activityCompose = "1.9.3"
+composeBom = "2024.12.01"
+hilt = "2.53.1"
+hiltNavCompose = "1.2.0"
+navigation = "2.8.5"
+coroutines = "1.9.0"
+junit = "4.13.2"
+junitExt = "1.2.1"
+espresso = "3.6.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavCompose" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+`;
+
+  // ── app/build.gradle.kts ────────────────────────────────
+  files['app/build.gradle.kts'] = `plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "${answers.package}"
-    compileSdk = 34
+    namespace = "${pkg}"
+    compileSdk = ${compileSdk}
 
     defaultConfig {
-        applicationId = "${answers.package}"
-        minSdk = ${answers.minSdk}
-        targetSdk = 34
+        applicationId = "${pkg}"
+        minSdk = ${minSdk}
+        targetSdk = ${targetSdk}
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildFeatures { compose = true }
-    composeOptions { kotlinCompilerExtensionVersion = "1.5.1" }
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.compose.ui:ui:1.6.0")
-    implementation("com.google.dagger:hilt-android:2.50")
-    // MAD Pro: Additional skills will be added via init
-}`;
+    // Core
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.activity.compose)
 
-  // MainActivity.kt
-  const mainActivity = `package ${answers.package}
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    debugImplementation(libs.androidx.ui.tooling)
+}
+`;
+
+  // ── gradle.properties ───────────────────────────────────
+  files['gradle.properties'] = `# Project-wide Gradle settings.
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+org.gradle.parallel=true
+org.gradle.caching=true
+android.useAndroidX=true
+kotlin.code.style=official
+android.nonTransitiveRClass=true
+`;
+
+  // ── gradle-wrapper.properties ───────────────────────────
+  files['gradle/wrapper/gradle-wrapper.properties'] = `distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\\://services.gradle.org/distributions/gradle-8.9-bin.zip
+networkTimeout=10000
+validateDistributionUrl=true
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+`;
+
+  // ── AndroidManifest.xml ─────────────────────────────────
+  files['app/src/main/AndroidManifest.xml'] = `<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:name=".${projectName}Application"
+        android:allowBackup=true
+        android:icon="@mipmap/ic_launcher"
+        android:label="${projectName}"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+`;
+
+  // ── Application.kt ──────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/${projectName}Application.kt`] = `package ${pkg}
+
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class ${projectName}Application : Application()
+`;
+
+  // ── MainActivity.kt ─────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/MainActivity.kt`] = `package ${pkg}
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.Text
+import androidx.activity.enableEdgeToEdge
+import ${pkg}.ui.navigation.AppNavHost
+import ${pkg}.ui.theme.${projectName}Theme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
-            Text(text = "Welcome to MAD Pro Project!")
+            ${projectName}Theme {
+                AppNavHost()
+            }
         }
     }
-}`;
+}
+`;
 
-  // Writes files
-  await fs.writeFile(path.join(targetDir, 'app/build.gradle.kts'), buildGradle);
-  await fs.writeFile(path.join(targetDir, 'app/src/main/java/', packagePath, 'MainActivity.kt'), mainActivity);
-  await fs.writeFile(path.join(targetDir, 'settings.gradle.kts'), `rootProject.name = "${projectName}"\ninclude(":app")`);
+  // ── Color.kt ────────────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/ui/theme/Color.kt`] = `package ${pkg}.ui.theme
 
-  console.log(chalk.green('✓ Basic structure created.'));
+import androidx.compose.ui.graphics.Color
 
-  // 3. Chain to Init Wizard
-  console.log(chalk.yellow('\n⏩ Chaining to Skill Wizard for auto-configuration...'));
-  
-  // Move to target directory to run init correctly
+val Purple80 = Color(0xFFD0BCFF)
+val PurpleGrey80 = Color(0xFFCCC2DC)
+val Pink80 = Color(0xFFEFB8C8)
+
+val Purple40 = Color(0xFF6650a4)
+val PurpleGrey40 = Color(0xFF625b71)
+val Pink40 = Color(0xFF7D5260)
+`;
+
+  // ── Type.kt ─────────────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/ui/theme/Type.kt`] = `package ${pkg}.ui.theme
+
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+
+val Typography = Typography(
+    displayLarge = TextStyle(
+        fontWeight = FontWeight.Bold,
+        fontSize = 57.sp,
+        lineHeight = 64.sp,
+        letterSpacing = (-0.25).sp
+    ),
+    headlineMedium = TextStyle(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 28.sp,
+        lineHeight = 36.sp
+    ),
+    bodyLarge = TextStyle(
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    labelSmall = TextStyle(
+        fontWeight = FontWeight.Medium,
+        fontSize = 11.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp
+    )
+)
+`;
+
+  // ── Theme.kt ────────────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/ui/theme/Theme.kt`] = `package ${pkg}.ui.theme
+
+import android.os.Build
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+
+private val DarkColorScheme = darkColorScheme(
+    primary = Purple80,
+    secondary = PurpleGrey80,
+    tertiary = Pink80
+)
+
+private val LightColorScheme = lightColorScheme(
+    primary = Purple40,
+    secondary = PurpleGrey40,
+    tertiary = Pink40
+)
+
+@Composable
+fun ${projectName}Theme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
+) {
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
+
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = Typography,
+        content = content
+    )
+}
+`;
+
+  // ── Navigation ──────────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/ui/navigation/AppNavHost.kt`] = `package ${pkg}.ui.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import ${pkg}.ui.screens.home.HomeScreen
+
+@Composable
+fun AppNavHost() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") {
+            HomeScreen()
+        }
+    }
+}
+`;
+
+  // ── HomeScreen ──────────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/ui/screens/home/HomeScreen.kt`] = `package ${pkg}.ui.screens.home
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("${projectName}") })
+        }
+    ) { padding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Welcome to ${projectName}!",
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+    }
+}
+`;
+
+  // ── HomeViewModel ───────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/ui/screens/home/HomeViewModel.kt`] = `package ${pkg}.ui.screens.home
+
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class HomeViewModel @Inject constructor() : ViewModel()
+`;
+
+  // ── DI AppModule ────────────────────────────────────────
+  files[`app/src/main/java/${pkgPath}/di/AppModule.kt`] = `package ${pkg}.di
+
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+    // Provide your app-wide dependencies here
+}
+`;
+
+  // ── res/values ──────────────────────────────────────────
+  files['app/src/main/res/values/strings.xml'] = `<resources>
+    <string name="app_name">${projectName}</string>
+</resources>
+`;
+
+  files['app/src/main/res/values/colors.xml'] = `<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+`;
+
+  // ── proguard-rules.pro ──────────────────────────────────
+  files['app/proguard-rules.pro'] = `# Add project specific ProGuard rules here.
+# -keep class ${pkg}.data.remote.dto.** { *; }
+`;
+
+  // ── .gitignore ──────────────────────────────────────────
+  files['.gitignore'] = `*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+`;
+
+  // ── Write All Files ─────────────────────────────────────
+  let fileCount = 0;
+  for (const [filePath, content] of Object.entries(files)) {
+    const fullPath = path.join(targetDir, filePath);
+    await fs.ensureDir(path.dirname(fullPath));
+    await fs.writeFile(fullPath, content);
+    fileCount++;
+    console.log(`  ${chalk.green('✓')} ${filePath}`);
+  }
+
+  console.log(chalk.bold.green(`\n📁 Generated ${fileCount} files.\n`));
+
+  // ── Chain to Skill Wizard ───────────────────────────────
+  console.log(chalk.yellow('⏩ Launching Skill Wizard...\n'));
+
   const originalCwd = process.cwd();
   process.chdir(targetDir);
-  
-  await initCommand({ ide: 'cursor' });
-  
+  await initCommand({});
   process.chdir(originalCwd);
 
   console.log(chalk.bold.green(`\n🚀 Project "${projectName}" is ready!`));
-  console.log(chalk.white(`Open this folder in your IDE to start building.`));
+  console.log(chalk.white(`\n  cd ${projectName}`));
+  console.log(chalk.white(`  ./gradlew assembleDebug\n`));
 }
