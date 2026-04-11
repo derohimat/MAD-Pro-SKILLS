@@ -281,11 +281,32 @@
                 </div>
             </div>
             
-            <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-                <code>mad-pro doctor</code>
-                <code>mad-pro doctor --security</code>
-                <code>mad-pro doctor --review main</code>
-                <code>mad-pro doctor --fix</code>
+            <div style="margin-top: 3rem;">
+                <h3 style="color: var(--on-background); margin-bottom: 1.5rem; font-size: 1.25rem;">Sub-modules & Flags:</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <code class="mini-terminal" style="display: inline-block; margin-bottom: 0.5rem;">mad-pro doctor</code>
+                        <p style="margin: 0; font-size: 0.9rem; color: #a9b1d6; line-height: 1.5;">Default run. Scans your entire codebase recursively for architecture anti-patterns, DI bypasses, and God-classes.</p>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <code class="mini-terminal">--security</code>
+                        </div>
+                        <p style="margin: 0; font-size: 0.9rem; color: #a9b1d6; line-height: 1.5;">Stacks a deep security scan. Detects hardcoded API keys, insecure HTTP endpoints, unencrypted prefs, and GlobalScope leaks.</p>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <code class="mini-terminal">--review &lt;branch&gt;</code>
+                        </div>
+                        <p style="margin: 0; font-size: 0.9rem; color: #a9b1d6; line-height: 1.5;">Performs a targeted scan utilizing <code>git diff</code>. Exclusively analyzes files changed against the target branch. Excellent for PR validations.</p>
+                    </div>
+                    <div style="background: rgba(255, 255, 255, 0.05); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <code class="mini-terminal">--fix</code> <span style="background: var(--primary); padding: 0.1rem 0.4rem; border-radius: 4px; font-size: 0.7rem; font-weight: bold;">Beta</span>
+                        </div>
+                        <p style="margin: 0; font-size: 0.9rem; color: #a9b1d6; line-height: 1.5;">Automatically scaffolds required classes (e.g. <code>GeneratedUseCase.kt</code>) and provides drop-in code refactors straight to your console.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
