@@ -22,9 +22,11 @@ export default async function addCommand() {
   // 1. Get all available skills
   const coreFiles = fs.readdirSync(sourceDir).filter(f => f.endsWith('.md'));
   const industryPath = path.join(sourceDir, 'industry');
-  const industryFiles = fs.readdirSync(industryPath).filter(f => f.endsWith('.md')).map(f => `industry/${f}`);
+  const industryFiles = fs.existsSync(industryPath) ? fs.readdirSync(industryPath).filter(f => f.endsWith('.md')).map(f => `industry/${f}`) : [];
+  const tokenPath = path.join(sourceDir, 'design-tokens');
+  const tokenFiles = fs.existsSync(tokenPath) ? fs.readdirSync(tokenPath).filter(f => f.endsWith('.md')).map(f => `design-tokens/${f}`) : [];
 
-  const allSkills = [...coreFiles, ...industryFiles].map(f => ({
+  const allSkills = [...coreFiles, ...industryFiles, ...tokenFiles].map(f => ({
     name: f.replace('.md', '').replace(/_/g, ' ').toUpperCase(),
     value: f
   })).sort((a, b) => a.name.localeCompare(b.name));
@@ -48,14 +50,16 @@ export default async function addCommand() {
   // 3. Perform Copying
   const targetRefDir = path.join(rootDir, 'references');
   const targetIndustryDir = path.join(targetRefDir, 'industry');
+  const targetTokenDir = path.join(targetRefDir, 'design-tokens');
   await fs.ensureDir(targetRefDir);
   await fs.ensureDir(targetIndustryDir);
+  await fs.ensureDir(targetTokenDir);
 
   console.log(chalk.cyan('\n📦 Adding selected skills...'));
 
   for (const skill of answers.skills) {
     const src = path.join(sourceDir, skill);
-    const dest = path.join(targetRefDir, skill);
+    const dest = path.join(targetRefDir, skill.replace('industry/', 'industry/').replace('design-tokens/', 'design-tokens/'));
     
     if (fs.existsSync(src)) {
       await fs.copy(src, dest);

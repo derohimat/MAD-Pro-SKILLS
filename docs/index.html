@@ -19,6 +19,7 @@
             <a href="#why" class="nav-link">Why MAD Pro?</a>
             <a href="#how-it-works" class="nav-link">How it Works</a>
             <a href="#skillset" class="nav-link">Skillset</a>
+            <a href="#doctor" class="nav-link">Doctor</a>
             <a href="#get-started" class="nav-link nav-link-cta">Get Started</a>
             <a href="https://github.com/derohimat/MAD-Pro-SKILLS" class="nav-link" target="_blank" rel="noopener">GitHub ↗</a>
         </div>
@@ -216,8 +217,8 @@
                 <div class="feature-card">
                     <div class="feature-icon">🩺</div>
                     <h4>doctor</h4>
-                    <p>Audit your project structure. Ensures your architecture remains compliant with Modern Android Development standards.</p>
-                    <code class="mini-terminal">mad-pro doctor</code>
+                    <p>Audit your project structure. Detect architecture anti-patterns, security vulnerabilities, memory leaks, and perform git diff code reviews with refactor recommendations.</p>
+                    <code class="mini-terminal">mad-pro doctor --security</code>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🧠</div>
@@ -237,6 +238,54 @@
                     <p>Inventory management. View all currently installed skills and categories in your project at a glance.</p>
                     <code class="mini-terminal">mad-pro list</code>
                 </div>
+            </div>
+        </section>
+
+        <!-- ─── Doctor Details ───────────────────────────────────────── -->
+        <section id="doctor" class="section">
+            <div class="section-label">MAD Pro Doctor</div>
+            <h2 class="section-title">The Ultimate Architecture & Security Scanner</h2>
+            <p class="section-subtitle">Adaptive scanning tailored to your team's chosen architecture, plus deep security insights and PR reviews.</p>
+            
+            <div class="why-grid" style="margin-top: 3rem;">
+                <div class="why-card">
+                    <h3>🏛️ Architecture Templates</h3>
+                    <p>Supports scanning customized to MVVM, MVI, MVP, Clean+MVI, or VIPER. Automatically detects DI usage (Hilt/Koin).</p>
+                </div>
+                <div class="why-card">
+                    <h3>🔒 Security & Leaks</h3>
+                    <p>Scans for hardcoded APIs, HTTP usage, unencrypted prefs, unprotected broadcast receivers, and GlobalScope leaks.</p>
+                </div>
+            </div>
+
+            <div class="features-grid" style="margin-top: 2rem;">
+                <div class="feature-card" style="grid-column: span 3; background: var(--surface-2);">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #a9b1d6;">
+                        <div style="color: #bb9af7;">🩺 MAD Pro Code Review vs `main`</div>
+                        <div style="margin-bottom: 1rem;">Changed files: 5 | Issues found: 3</div>
+                        
+                        <div style="color: #7dcfff;">📄 HomeViewModel.kt</div>
+                        <div style="padding-left: 1rem;">
+                            <span style="color: #f7768e;">❌ [CRITICAL]</span> runBlocking detected (line 42)<br>
+                            <span style="color: #f7768e;">❌ [SECURITY]</span> Hardcoded token detected (line 18)
+                        </div>
+                        
+                        <div style="color: #7dcfff; margin-top: 1rem;">📄 UserRepository.kt</div>
+                        <div style="padding-left: 1rem; color: #9ece6a;">✅ No issues found</div>
+                        
+                        <div style="margin-top: 1rem; border-top: 1px dashed #565f89; padding-top: 1rem;">
+                            <span style="color: #f7768e;">❌ 2 Critical</span> | <span style="color: #e0af68;">⚠️ 1 Warning</span> | <span style="color: #9ece6a;">✅ 3 files clean</span><br>
+                            <span style="color: #9d7cd8;">Run `mad-pro doctor --fix` to scaffold recommended fixes.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                <code>mad-pro doctor</code>
+                <code>mad-pro doctor --security</code>
+                <code>mad-pro doctor --review main</code>
+                <code>mad-pro doctor --fix</code>
             </div>
         </section>
 

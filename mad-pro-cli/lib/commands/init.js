@@ -47,7 +47,8 @@ export default async function initCommand(options) {
         { name: 'AI & Emerging (Gemini, LLM UI, ARCore)', value: 'ai', checked: false },
         { name: 'Industry Verticals (Banking, E-commerce, etc.)', value: 'industry', checked: false },
         { name: 'Monetization & Play (Billing, Subs)', value: 'monetization', checked: false },
-        { name: 'Engineering Excellence (Modularization, CI/CD)', value: 'engineering', checked: false }
+        { name: 'Engineering Excellence (Modularization, CI/CD)', value: 'engineering', checked: false },
+        { name: 'Design Tokens (Colors, Typography, Spacing)', value: 'tokens', checked: true }
       ]
     }
   ]);
@@ -72,9 +73,13 @@ export default async function initCommand(options) {
   // 4. Create Target Directories
   const targetRefDir = path.join(rootDir, 'references');
   const targetIndustryDir = path.join(targetRefDir, 'industry');
+  const targetTokenDir = path.join(targetRefDir, 'design-tokens');
   await fs.ensureDir(targetRefDir);
   if (selectedIndustries.length > 0 || answers.categories.includes('monetization')) {
     await fs.ensureDir(targetIndustryDir);
+  }
+  if (answers.categories.includes('tokens')) {
+    await fs.ensureDir(targetTokenDir);
   }
 
   // 5. Build Mapping & Copy Files
@@ -92,7 +97,8 @@ export default async function initCommand(options) {
     'engineering': [
       'modularization.md', 'architecture_di.md', 'concurrency.md', 'performance.md', 'testing.md',
       'design_systems.md', 'observability.md', 'ci_cd.md'
-    ]
+    ],
+    'tokens': ['design-tokens/color-tokens.md', 'design-tokens/typography-tokens.md', 'design-tokens/spacing-tokens.md']
   };
 
   let filesToCopy = [];
@@ -115,7 +121,7 @@ export default async function initCommand(options) {
   
   for (const file of filesToCopy) {
     const src = path.join(sourceDir, file);
-    const destName = file.includes('industry/') ? file.replace('industry/', 'industry/') : file;
+    const destName = file.includes('industry/') ? file.replace('industry/', 'industry/') : (file.includes('design-tokens/') ? file.replace('design-tokens/', 'design-tokens/') : file);
     const dest = path.join(targetRefDir, destName);
     
     if (fs.existsSync(src)) {

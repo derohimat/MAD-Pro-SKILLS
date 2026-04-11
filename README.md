@@ -98,10 +98,10 @@ Visit our **[Premium Documentation Site](https://derohimat.github.io/MAD-Pro-SKI
 
 ## 🚀 Roadmap
 
-- [ ] **mad-pro create**: Scaffold a full 100% MAD-compliant Android project template.
-- [ ] **mad-pro doctor**: Scan project for architectural anti-patterns.
-- [ ] **mad-pro prompt**: Generate optimized system instructions for agents.
-- [ ] **Design Tokens**: Ready-to-use color & typography scales for agents.
+- [x] **mad-pro create**: Scaffold a full 100% MAD-compliant Android project template.
+- [x] **mad-pro doctor**: Scan project for architectural anti-patterns, security vulnerabilities, and diff code review.
+- [x] **mad-pro prompt**: Generate optimized system instructions dynamically based on project architecture.
+- [x] **Design Tokens**: Ready-to-use color & typography scales for agents.
 
 ---
 
