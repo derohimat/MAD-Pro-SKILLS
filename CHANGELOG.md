@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-04-13
+
+### Added — Architecture & Quality Gate
+- `mad-pro doctor`: Interactive project scanner supporting MVVM, MVI, MVP, Clean+MVI, and VIPER architectures.
+- Adaptive architecture rules engine to prevent God-classes and strict Domain layer bypasses.
+- `--security` flag for `doctor`: Scans for hardcoded APIs, insecure HTTP, plaintext SharedPreferences, and memory leaks (`GlobalScope.launch`, decoupled BroadcastReceivers).
+- `--review <branch>` flag for `doctor`: Targeted git diff reviewer for CI/CD and Pull Request validations.
+- `--fix` (Beta) flag to scaffold auto-fixes.
+
+### Added — Agent Context Improvements
+- `mad-pro prompt`: Context-aware prompt generator. Reads `.mad-pro.json` to generate specialized instructions based on architecture and DI choices.
+- `Design Tokens`: Base templates for unified AI-generated styling. Installs `color-tokens.md`, `typography-tokens.md`, and `spacing-tokens.md` via `mad-pro add`.
+
+### Added — Documentation
+- `docs/WIKI.md`: Comprehensive CLI documentation manual.
+- Updated `docs/index.html` referencing the new scanner GUI and flags.
+
 ## [1.2.0] - 2026-03-25
 
 ### Added — Platform Capabilities

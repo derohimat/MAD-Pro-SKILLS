@@ -11,7 +11,7 @@ import promptCommand from './lib/commands/prompt.js';
 program
   .name('mad-pro')
   .description('MAD Pro CLI - Boost your project with AI Expert Skills')
-  .version('1.2.0');
+  .version('1.3.0');
 
 program
   .command('init')

@@ -17,7 +17,7 @@ From **Clean Architecture** and **Hilt DI** to **Banking SDKs** and **Gemini AI*
 
 ---
 
-## 🚦 Interactive Setup (v1.2.0)
+## 🚦 Interactive Setup (v1.3.0)
 
 MAD Pro now features a **Smart Wizard** for selective initialization. No more cluttering your project with unused skills.
 

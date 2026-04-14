@@ -71,7 +71,7 @@ export default async function promptCommand(cmdObj) {
   const promptBuilder = [];
   
   if (formatRes.format !== 'generic') {
-     promptBuilder.push(`You are an expert Android Developer using the MAD Pro v1.2.0 framework.`);
+     promptBuilder.push(`You are an expert Android Developer using the MAD Pro v1.3.0 framework.`);
      promptBuilder.push(`Your goal is to build highly scalable, testable, and maintainable Android apps.\n`);
   } else {
      promptBuilder.push(`# AI AGENT INSTRUCTIONS (MAD PRO)`);

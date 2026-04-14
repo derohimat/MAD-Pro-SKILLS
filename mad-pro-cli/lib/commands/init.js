@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default async function initCommand(options) {
-  console.log(chalk.bold.magenta('\n🚀 MAD Pro CLI - Skill Wizard v1.2.0'));
+  console.log(chalk.bold.magenta('\n🚀 MAD Pro CLI - Skill Wizard v1.3.0'));
   console.log(chalk.gray('Setting up your Android project with architecture excellence...\n'));
 
   // 1. Identify Source & Target
