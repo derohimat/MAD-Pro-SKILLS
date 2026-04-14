@@ -27,5 +27,8 @@
     "commander": "^14.0.3",
     "fs-extra": "^11.3.4",
     "inquirer": "^12.4.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
